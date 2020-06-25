@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "594581396208",
+    "firebase_url": "https://chat-app-71bd1.firebaseio.com",
+    "project_id": "chat-app-71bd1",
+    "storage_bucket": "chat-app-71bd1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:594581396208:android:f8176dc001a5f9ffe8c035",
+        "android_client_info": {
+          "package_name": "lk.ucsc.chatapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "594581396208-om1uvbi009pk00j0do3pn2m7db43gi3f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB88o5yUtTgT_Z71fGWw0L3kRDpmwTIFM4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "594581396208-om1uvbi009pk00j0do3pn2m7db43gi3f.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "594581396208-3sr611muoplsr61gvs74ghtrch19p0b4.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "lk.ucsc.chatApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

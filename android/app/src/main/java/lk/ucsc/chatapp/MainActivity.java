@@ -1,4 +1,4 @@
-package com.chatapp;
+package lk.ucsc.chatapp;
 
 import com.facebook.react.ReactActivity;
 
