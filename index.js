@@ -9,14 +9,20 @@ import { Provider as StoreProvider } from 'react-redux';
 import App from './src/App';
 import { name as appName } from './app.json';
 import store from './store';
+import { theme } from './src/core/theme';
+import configureStore from 'src/store/configureStore';
+const { persistor, store } = configureStore();
+import NavigationStack from 'src/App';
 
 export default function Main() {
   return (
-    <StoreProvider store={store}>
-      <PaperProvider>
-        <App />
-      </PaperProvider>
-    </StoreProvider>
+            <Provider store={store}>
+                <PersistGate persistor={persistor}>
+                    <PaperProvider theme={theme}>
+                        <NavigationStack />
+                    </PaperProvider>
+                </PersistGate>
+            </Provider>
   );
 }
 
