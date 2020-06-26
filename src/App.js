@@ -6,24 +6,29 @@
  * @flow strict-local
  */
 
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { createAppContainer } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
 
-import LoginScreen from 'src/screens/login'
+import {
+  HomeScreen,
+  LoginScreen,
+  RegisterScreen,
+  ForgotPasswordScreen,
+  Dashboard,
+} from './screens';
 
-export default class App extends React.Component {
-  render() {
-    return (
-      <LoginScreen />
-    );
-  }
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+const Router = createStackNavigator(
+  {
+    HomeScreen,
+    LoginScreen,
+    RegisterScreen,
+    ForgotPasswordScreen,
+    Dashboard,
   },
-});
+  {
+    initialRouteName: 'HomeScreen',
+    headerMode: 'none',
+  }
+);
+
+export default createAppContainer(Router);
