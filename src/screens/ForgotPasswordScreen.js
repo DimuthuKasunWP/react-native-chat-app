@@ -1,12 +1,12 @@
 import React, { memo, useState } from 'react';
 import { Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { emailValidator } from '../core/utils';
+import { emailValidator } from '../validations/utils';
 import Background from '../components/Background';
 import BackButton from '../components/BackButton';
 import Logo from '../components/Logo';
 import Header from '../components/Header';
 import TextInput from '../components/TextInput';
-import { theme } from '../core/theme';
+import { theme } from '../config/theme';
 import Button from '../components/Button';
 
 const ForgotPasswordScreen = ({ navigation }) => {

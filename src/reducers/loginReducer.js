@@ -1,7 +1,7 @@
 /* Login Reducer
  * handles login states in the app
  */
-import createReducer from './ccreateReducer';
+import createReducer from './createReducer';
 import * as actionTypes from 'src/actions/actionTypes';
 
 const initialState = {
