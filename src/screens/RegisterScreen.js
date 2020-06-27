@@ -1,5 +1,5 @@
 import React, { memo, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { Alert,View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Background from '../components/Background';
 import Logo from '../components/Logo';
 import Header from '../components/Header';
@@ -12,6 +12,7 @@ import {
   passwordValidator,
   nameValidator,
 } from '../validations/utils';
+import auth from "@react-native-firebase/auth"
 
 const RegisterScreen = ({ navigation }) => {
   const [name, setName] = useState({ value: '', error: '' });
@@ -22,6 +23,7 @@ const RegisterScreen = ({ navigation }) => {
     const nameError = nameValidator(name.value);
     const emailError = emailValidator(email.value);
     const passwordError = passwordValidator(password.value);
+   
 
     if (emailError || passwordError || nameError) {
       setName({ ...name, error: nameError });
@@ -29,9 +31,22 @@ const RegisterScreen = ({ navigation }) => {
       setPassword({ ...password, error: passwordError });
       return;
     }
-
+    
+    __doCreateUser(email.value, password.value);
+    
     navigation.navigate('Dashboard');
   };
+
+  const __doCreateUser = async (email, password) => {
+    auth().createUserWithEmailAndPassword(email, password)
+    .then(()=>{
+        Alert.alert("account successfully created");
+      })
+    .catch((error)=> {
+        console.log(error.code);
+        console.log(error.message);
+      });
+}
 
   return (
     <Background>
@@ -45,7 +60,7 @@ const RegisterScreen = ({ navigation }) => {
         label="Name"
         returnKeyType="next"
         value={name.value}
-        onChangeText={text => setName({ value: text, error: '' })}
+        onChangeText={(text) => setName({ value: text, error: '' })}
         error={!!name.error}
         errorText={name.error}
       />
@@ -54,7 +69,7 @@ const RegisterScreen = ({ navigation }) => {
         label="Email"
         returnKeyType="next"
         value={email.value}
-        onChangeText={text => setEmail({ value: text, error: '' })}
+        onChangeText={(text) => setEmail({ value: text, error: '' })}
         error={!!email.error}
         errorText={email.error}
         autoCapitalize="none"
@@ -67,7 +82,7 @@ const RegisterScreen = ({ navigation }) => {
         label="Password"
         returnKeyType="done"
         value={password.value}
-        onChangeText={text => setPassword({ value: text, error: '' })}
+        onChangeText={(text) => setPassword({ value: text, error: '' })}
         error={!!password.error}
         errorText={password.error}
         secureTextEntry
