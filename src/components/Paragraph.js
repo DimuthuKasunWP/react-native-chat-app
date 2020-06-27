@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
 import { StyleSheet, Text } from 'react-native';
-import { theme } from '../core/theme';
+import { theme } from '../config/theme';
 
 const Paragraph = ({ children }) => <Text style={styles.text}>{children}</Text>;
 
