@@ -6,12 +6,12 @@ import Header from '../components/Header';
 import Button from '../components/Button';
 import TextInput from '../components/TextInput';
 import BackButton from '../components/BackButton';
-import { theme } from '../core/theme';
+import { theme } from '../config/theme';
 import {
   emailValidator,
   passwordValidator,
   nameValidator,
-} from '../core/utils';
+} from '../validations/utils';
 
 const RegisterScreen = ({ navigation }) => {
   const [name, setName] = useState({ value: '', error: '' });
