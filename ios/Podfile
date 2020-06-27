@@ -79,6 +79,8 @@ target 'ChatApp' do
 
   pod 'RNFirebase', :path => '../node_modules/react-native-firebase'
 
+  pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
+
   target 'ChatAppTests' do
     inherit! :complete
     # Pods for testing
