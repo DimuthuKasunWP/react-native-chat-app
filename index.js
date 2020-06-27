@@ -14,7 +14,7 @@ const { persistor, store } = configureStore();
 import NavigationStack from 'src/App';
 import { PersistGate } from 'redux-persist/es/integration/react';
 import { YellowBox } from 'react-native';
-import OfflineNotice from '.src/components/OfflineNotice'
+import OfflineNotice from 'src/components/OfflineNotice'
 
 YellowBox.ignoreWarnings([
     'Warning: isMounted(...) is deprecated',
