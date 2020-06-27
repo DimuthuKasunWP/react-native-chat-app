@@ -6,8 +6,8 @@ import Header from '../components/Header';
 import Button from '../components/Button';
 import TextInput from '../components/TextInput';
 import BackButton from '../components/BackButton';
-import { theme } from '../core/theme';
-import { emailValidator, passwordValidator } from '../core/utils';
+import { theme } from '../config/theme';
+import { emailValidator, passwordValidator } from '../validations/utils';
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState({ value: '', error: '' });
