@@ -77,9 +77,11 @@ target 'ChatApp' do
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
-  pod 'RNFirebase', :path => '../node_modules/react-native-firebase'
+  # pod 'RNFirebase', :path => '../node_modules/react-native-firebase'
 
   pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
+
+  pod 'react-native-netinfo', :path => '../node_modules/@react-native-community/netinfo'
 
   target 'ChatAppTests' do
     inherit! :complete
