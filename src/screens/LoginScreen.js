@@ -1,4 +1,5 @@
-import React, { memo, useState } from 'react';
+import React, { memo, useState,dispatch } from 'react';
+import {connect} from 'react-redux';
 import { TouchableOpacity, StyleSheet, Text, View } from 'react-native';
 import Background from '../components/Background';
 import Logo from '../components/Logo';
@@ -8,10 +9,24 @@ import TextInput from '../components/TextInput';
 import BackButton from '../components/BackButton';
 import { theme } from '../config/theme';
 import { emailValidator, passwordValidator } from '../validations/utils';
+import auth from "@react-native-firebase/auth";
+import {LOGIN_REQUEST,LOGIN_SUCCESS,LOGIN_FAILED} from '../actions/actionTypes';
+import { loginSuccess,loginFailed ,requestLogin} from '../actions/loginActions';
+import AwesomeAlert from 'react-native-awesome-alerts';
 
-const LoginScreen = ({ navigation }) => {
+const LoginScreen = ({ navigation ,dispatch,isLoading,message,title,isLoggedIn}) => {
   const [email, setEmail] = useState({ value: '', error: '' });
   const [password, setPassword] = useState({ value: '', error: '' });
+  const[showAlert,setAlert]=useState(false);
+
+  showAlertf = () => {
+   setAlert(true);
+  };
+ 
+  hideAlert = () => {
+    setAlert(false);
+  };
+
 
   const _onLoginPressed = () => {
     const emailError = emailValidator(email.value);
@@ -22,9 +37,91 @@ const LoginScreen = ({ navigation }) => {
       setPassword({ ...password, error: passwordError });
       return;
     }
-
-    navigation.navigate('Dashboard');
+    dispatch(requestLogin());
+    showAlertf();
+    _handleLogin(email.value, password.value);
   };
+
+ const _handleLogin = async (email, password) => {
+     auth().signInWithEmailAndPassword(email, password)
+     .then(()=>{
+       dispatch(loginSuccess());
+       hideAlert();
+        navigation.navigate('Dashboard')
+      })
+      .catch((error)=> {
+
+      if(error.code ==='auth/wrong-password'){
+        
+        this.showAlertf();
+        dispatch(loginFailed("Try Again !","Wrong Username/password"))
+       
+      }
+      
+      if(error.code ==='auth/user-not-found'){
+        
+        this.showAlertf();
+        dispatch(loginFailed("No such a user","Register with us!"));
+       
+      }
+          
+        console.log(error.code);
+        console.log(error.message);
+      });
+
+  }
+  const alert = () => {    
+    if (isLoading)
+      return (
+        <AwesomeAlert
+          show={showAlert}
+          showProgress={true}
+          title={''}
+          message={''}
+          closeOnTouchOutside={true}
+          closeOnHardwareBackPress={false}
+          showCancelButton={false}
+          showConfirmButton={false}
+          cancelText="No, cancel"
+          confirmText="OK"
+          confirmButtonColor="#ADD8E6"
+          onCancelPressed={() => {
+            this.hideAlert();
+          }}
+          onConfirmPressed={() => {
+            this.hideAlert();
+            navigation.navigate('LoginScreen')
+          }}
+        />
+
+      )
+      else
+        return(
+          <AwesomeAlert
+          show={showAlert}
+          showProgress={false}
+          title={title}
+          message={message}
+          closeOnTouchOutside={true}
+          closeOnHardwareBackPress={false}
+          showCancelButton={false}
+          showConfirmButton={true}
+          cancelText="No, cancel"
+          confirmText="OK"
+          confirmButtonColor="#ADD8E6"
+          onCancelPressed={() => {
+            this.hideAlert();
+          }}
+          onConfirmPressed={() => {
+            this.hideAlert();
+            navigation.navigate('LoginScreen')
+          }}
+        />
+        )
+  
+  
+  }
+
 
   return (
     <Background>
@@ -64,6 +161,7 @@ const LoginScreen = ({ navigation }) => {
           <Text style={styles.label}>Forgot your password?</Text>
         </TouchableOpacity>
       </View>
+      {alert()}
 
       <Button mode="contained" onPress={_onLoginPressed}>
         Login
@@ -98,4 +196,15 @@ const styles = StyleSheet.create({
   },
 });
 
-export default memo(LoginScreen);
+
+function mapStateToProps(state) {
+  return {
+    isLoading:state.loginReducer.isLoading,
+    isLoggedIn:state.loginReducer.isLoggedIn,
+    message:state.loginReducer.message,
+    title:state.loginReducer.title
+  }
+  
+}
+
+export default connect(mapStateToProps,null)(LoginScreen)
