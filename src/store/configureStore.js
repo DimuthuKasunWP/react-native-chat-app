@@ -4,7 +4,7 @@ import storage from 'redux-persist/es/storage'; // default: localStorage if web,
 import { createLogger } from 'redux-logger';
 import createSagaMiddleware from 'redux-saga';
 
-import rootReducers from 'src/reducers'; // where reducers is a object of reducers
+import loginReducer from 'src/reducers'; // where reducers is a object of reducers
 import sagas from 'src/sagas';
 
 const config = {
@@ -22,7 +22,7 @@ if (__DEV__) {
     middleware.push(createLogger());
 }
 
-const reducers = persistCombineReducers(config, rootReducers);
+const reducers = persistCombineReducers(config, loginReducer);
 
 const enhancers = [applyMiddleware(...middleware)];
 // const initialState = {};
