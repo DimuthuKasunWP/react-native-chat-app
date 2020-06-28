@@ -2,8 +2,8 @@
  * @format
  */
 
-import * as React from 'react';
-import { AppRegistry } from 'react-native';
+import  React, {useState} from 'react';
+import { AppRegistry,Animated } from 'react-native';
 import { Provider as PaperProvider } from 'react-native-paper';
 import { Provider } from 'react-redux';
 import App from './src/App';
@@ -22,6 +22,15 @@ YellowBox.ignoreWarnings([
 ]);
 
 export default function Main() {
+    const [animatePress, setAnimatePress] = useState(new Animated.Value(1))
+
+    const animateIn = () => {
+    Animated.timing(animatePress, {
+        toValue: 0.5,
+        duration: 500,
+        useNativeDriver: true 
+    }).start();
+    }
   return (
             <Provider store={store}>
                 <PersistGate persistor={persistor}>
