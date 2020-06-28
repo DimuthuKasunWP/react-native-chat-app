@@ -7,29 +7,35 @@ import * as actionTypes from 'src/actions/actionTypes';
 const initialState = {
     isLoggedIn: false,
     username: '',
-    password: ''
+    password: '',
+    message:'',
+    title:'',
+    isLoading:false
 };
 
 export const loginReducer = createReducer(initialState, {
-    [actionTypes.LOGIN_REQUEST](state, action) {
+    [actionTypes.LOGIN_REQUEST](state) {
         return {
-            ...state,
-            username: action.username,
-            password: action.password
+            isLoading:true,
+            isLoggedIn:false,
+            title:'',
+            message:''
         };
     },
-    [actionTypes.LOGIN_LOADING_ENDED](state) {
-        return { ...state };
-    },
-    [actionTypes.LOGIN_RESPONSE](state) {
+    [actionTypes.LOGIN_FAILED](state,action) {
         return {
-            ...state
+            isLoggedIn: false,
+            isLoading:false,
+            title:action.title,
+            message:action.message
         };
     },
-    [actionTypes.LOGIN_FAILED](state) {
+     [actionTypes.LOGIN_SUCCESS](state) {
         return {
-            ...state,
-            isLoggedIn: false
+            isLoggedIn: false,
+            isLoading:false,
+            title:'',
+            message:''
         };
     }
 });
