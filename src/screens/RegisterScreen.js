@@ -57,7 +57,7 @@ const RegisterScreen = ({ navigation }) => {
   const __doCreateUser = async (email, password) => {
     auth().createUserWithEmailAndPassword(email, password)
     .then(()=>{
-        this.showAlertf('Verification Required','Please verify your email');
+        this.showAlertf('Login Required','Please Login!');
         navigation.navigate('LoginScreen')
       })
     .catch((error)=> {
@@ -127,7 +127,6 @@ const RegisterScreen = ({ navigation }) => {
           }}
           onConfirmPressed={() => {
             this.hideAlert();
-            navigation.navigate('LoginScreen')
           }}
         />
 
