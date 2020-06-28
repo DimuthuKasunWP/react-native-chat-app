@@ -3,35 +3,24 @@
  */
 import * as types from './actionTypes';
 
-export function requestLogin(username, password) {
+export function requestLogin() {
     return {
-        type: types.LOGIN_REQUEST,
-        username,
-        password
+        type: types.LOGIN_REQUEST
+       
     };
 }
 
-export function loginFailed() {
+export function loginFailed(ttl,msg) {
     return {
-        type: types.LOGIN_FAILED
+        type: types.LOGIN_FAILED,
+        title:ttl,
+        message:msg
     };
 }
 
-export function onLoginResponse(response) {
-    return {
-        type: types.LOGIN_RESPONSE,
-        response
-    };
-}
 
-export function enableLoader() {
+export function loginSuccess() {
     return {
-        type: types.LOGIN_ENABLE_LOADER
-    };
-}
-
-export function disableLoader() {
-    return {
-        type: types.LOGIN_DISABLE_LOADER
+        type: types.LOGIN_SUCCESS
     };
 }
