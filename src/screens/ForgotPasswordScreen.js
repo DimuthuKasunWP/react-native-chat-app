@@ -8,9 +8,26 @@ import Header from '../components/Header';
 import TextInput from '../components/TextInput';
 import { theme } from '../config/theme';
 import Button from '../components/Button';
+import auth from "@react-native-firebase/auth";
+import AwesomeAlert from 'react-native-awesome-alerts';
 
 const ForgotPasswordScreen = ({ navigation }) => {
   const [email, setEmail] = useState({ value: '', error: '' });
+  const[showAlert,setAlert]=useState(false);
+  const[message,setMessage]=useState('');
+  const[title,setTitle]=useState('');
+
+  showAlertf = (ttl,msg) => {
+    setTitle(ttl);
+    setMessage(msg);
+    setAlert(true);
+  };
+ 
+  hideAlert = () => {
+    setTitle('');
+    setMessage('');
+    setAlert(false);
+  };
 
   const _onSendPressed = () => {
     const emailError = emailValidator(email.value);
@@ -20,8 +37,28 @@ const ForgotPasswordScreen = ({ navigation }) => {
       return;
     }
 
-    navigation.navigate('LoginScreen');
+   
+    _doSendLink(email.value);
   };
+
+  
+  const _doSendLink = async (email) => {
+    await auth().sendPasswordResetEmail(email)
+    .then(()=>{
+         this.showAlertf('Link Sent!','Please reset your password');
+        
+      })
+    .catch((error)=> {
+      if(error.code ==='auth/user-not-found'){
+        this.showAlertf("No such a user","Register with us!");
+         
+       }
+          
+        console.log(error.code);
+        console.log(error.message);
+      });
+
+  }
 
   return (
     <Background>
@@ -43,6 +80,25 @@ const ForgotPasswordScreen = ({ navigation }) => {
         textContentType="emailAddress"
         keyboardType="email-address"
       />
+       <AwesomeAlert
+          show={showAlert}
+          showProgress={false}
+          title={title}
+          message={message}
+          closeOnTouchOutside={true}
+          closeOnHardwareBackPress={false}
+          showCancelButton={false}
+          showConfirmButton={true}
+          cancelText="No, cancel"
+          confirmText="OK"
+          confirmButtonColor="#ADD8E6"
+          onCancelPressed={() => {
+            this.hideAlert();
+          }}
+          onConfirmPressed={() => {
+            this.hideAlert();
+          }}
+        />
 
       <Button mode="contained" onPress={_onSendPressed} style={styles.button}>
         Send Reset Instructions
