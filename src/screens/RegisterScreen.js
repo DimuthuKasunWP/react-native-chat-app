@@ -14,6 +14,7 @@ import {
 } from '../validations/utils';
 import auth from "@react-native-firebase/auth";
 import AwesomeAlert from 'react-native-awesome-alerts';
+import { ProgressDialog,ConfirmDialog } from 'react-native-simple-dialogs';
 
 const RegisterScreen = ({ navigation }) => {
   const [name, setName] = useState({ value: '', error: '' });
@@ -22,6 +23,7 @@ const RegisterScreen = ({ navigation }) => {
   const[showAlert,setAlert]=useState(false);
   const[message,setMessage]=useState('');
   const[title,setTitle]=useState('');
+  const[isLoading,setLoading]=useState(false);
   showAlertf = (ttl,msg) => {
     setTitle(ttl);
    setMessage(msg);
@@ -55,12 +57,17 @@ const RegisterScreen = ({ navigation }) => {
   };
 
   const __doCreateUser = async (email, password) => {
+     setLoading(true);
     auth().createUserWithEmailAndPassword(email, password)
     .then(()=>{
-        this.showAlertf('Login Required','Please Login!');
-        navigation.navigate('LoginScreen')
-      })
-    .catch((error)=> {
+         auth().currentUser.sendEmailVerification().then(()=>{
+           setLoading(false);
+        
+        this.showAlertf('Success','Please Verify Your Email!');
+         navigation.navigate('LoginScreen');
+
+        })
+      }).catch((error)=> {
       if(error.code ==='auth/email-already-in-use'){
         this.showAlertf('Email Exists','Proceed to login');
        
@@ -110,25 +117,23 @@ const RegisterScreen = ({ navigation }) => {
         errorText={password.error}
         secureTextEntry
       />
-      <AwesomeAlert
-          show={showAlert}
-          showProgress={false}
+       <ProgressDialog
+          visible={isLoading}
+          title=""
+          message="Please, wait..."
+      />
+      
+             <ConfirmDialog
           title={title}
           message={message}
-          closeOnTouchOutside={true}
-          closeOnHardwareBackPress={false}
-          showCancelButton={false}
-          showConfirmButton={true}
-          cancelText="No, cancel"
-          confirmText="OK"
-          confirmButtonColor="#ADD8E6"
-          onCancelPressed={() => {
-            this.hideAlert();
+          visible={showAlert}
+          onTouchOutside={() => setAlert(false)}
+          positiveButton={{
+              title: "OK",
+              onPress: () => setAlert(false)
           }}
-          onConfirmPressed={() => {
-            this.hideAlert();
-          }}
-        />
+          
+      />
 
       <Button mode="contained" onPress={_onSignUpPressed} style={styles.button}>
         Sign Up
