@@ -18,8 +18,15 @@ import OfflineNotice from 'src/components/OfflineNotice'
 
 YellowBox.ignoreWarnings([
     'Warning: isMounted(...) is deprecated',
-    'Module RCTImageLoader'
+    'Module RCTImageLoader',
+    'Warning: AsyncStorage '
 ]);
+console.ignoreWarnings = [
+    'Warning: isMounted(...) is deprecated',
+    'Module RCTImageLoader',
+    'AsyncStorage '
+    ];
+    console.disableYellowBox = true;
 
 export default function Main() {
     const [animatePress, setAnimatePress] = useState(new Animated.Value(1))
