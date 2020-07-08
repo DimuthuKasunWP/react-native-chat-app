@@ -2,5 +2,7 @@
  */
 
 import * as loginReducer from './loginReducer';
+import * as imageReducer from './imageReducer'
 
-export default loginReducer;
+
+export default Object.assign(loginReducer,imageReducer);
