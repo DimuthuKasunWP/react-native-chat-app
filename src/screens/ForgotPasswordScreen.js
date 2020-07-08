@@ -10,6 +10,7 @@ import { theme } from '../config/theme';
 import Button from '../components/Button';
 import auth from "@react-native-firebase/auth";
 import AwesomeAlert from 'react-native-awesome-alerts';
+import { ConfirmDialog } from 'react-native-simple-dialogs';
 
 const ForgotPasswordScreen = ({ navigation }) => {
   const [email, setEmail] = useState({ value: '', error: '' });
@@ -80,25 +81,18 @@ const ForgotPasswordScreen = ({ navigation }) => {
         textContentType="emailAddress"
         keyboardType="email-address"
       />
-       <AwesomeAlert
-          show={showAlert}
-          showProgress={false}
+     
+      <ConfirmDialog
           title={title}
           message={message}
-          closeOnTouchOutside={true}
-          closeOnHardwareBackPress={false}
-          showCancelButton={false}
-          showConfirmButton={true}
-          cancelText="No, cancel"
-          confirmText="OK"
-          confirmButtonColor="#ADD8E6"
-          onCancelPressed={() => {
-            this.hideAlert();
+          visible={showAlert}
+          onTouchOutside={() => setAlert(false)}
+          positiveButton={{
+              title: "OK",
+              onPress: () => setAlert(false)
           }}
-          onConfirmPressed={() => {
-            this.hideAlert();
-          }}
-        />
+          
+      />
 
       <Button mode="contained" onPress={_onSendPressed} style={styles.button}>
         Send Reset Instructions
