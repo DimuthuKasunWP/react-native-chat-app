@@ -15,8 +15,11 @@ import {
   RegisterScreen,
   ForgotPasswordScreen,
   Dashboard,
+  Camera,
+  ShowImage
 } from './screens';
 
+console.disableYellowBox = true;
 const Router = createStackNavigator(
   {
     HomeScreen,
@@ -24,9 +27,11 @@ const Router = createStackNavigator(
     RegisterScreen,
     ForgotPasswordScreen,
     Dashboard,
+    Camera,
+    ShowImage
   },
   {
-    initialRouteName: 'HomeScreen',
+    initialRouteName: 'Camera',
     headerMode: 'none',
   }
 );
