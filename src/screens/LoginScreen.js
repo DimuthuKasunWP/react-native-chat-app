@@ -12,7 +12,8 @@ import { emailValidator, passwordValidator } from '../validations/utils';
 import auth from "@react-native-firebase/auth";
 import {LOGIN_REQUEST,LOGIN_SUCCESS,LOGIN_FAILED} from '../actions/actionTypes';
 import { loginSuccess,loginFailed ,requestLogin} from '../actions/loginActions';
-import AwesomeAlert from 'react-native-awesome-alerts';
+// import AwesomeAlert from 'react-native-awesome-alerts';
+import { ConfirmDialog,ProgressDialog } from 'react-native-simple-dialogs';
 
 const LoginScreen = ({ navigation ,dispatch,isLoading,message,title,isLoggedIn}) => {
   const [email, setEmail] = useState({ value: '', error: '' });
@@ -45,15 +46,20 @@ const LoginScreen = ({ navigation ,dispatch,isLoading,message,title,isLoggedIn})
  const _handleLogin = async (email, password) => {
      auth().signInWithEmailAndPassword(email, password)
      .then(()=>{
-       dispatch(loginSuccess());
-       hideAlert();
-        navigation.navigate('Dashboard')
+        if(auth().currentUser.emailVerified){
+        dispatch(loginSuccess());
+        hideAlert();
+          navigation.navigate('Dashboard')
+       }else{
+          showAlertf();
+        dispatch(loginFailed("Verify Email","Please verify your email before signin"))
+       }
       })
       .catch((error)=> {
 
       if(error.code ==='auth/wrong-password'){
         
-        this.showAlertf();
+        showAlertf();
         dispatch(loginFailed("Try Again !","Wrong Username/password"))
        
       }
@@ -73,50 +79,30 @@ const LoginScreen = ({ navigation ,dispatch,isLoading,message,title,isLoggedIn})
   const alert = () => {    
     if (isLoading)
       return (
-        <AwesomeAlert
-          show={showAlert}
-          showProgress={true}
-          title={''}
-          message={''}
-          closeOnTouchOutside={true}
-          closeOnHardwareBackPress={false}
-          showCancelButton={false}
-          showConfirmButton={false}
-          cancelText="No, cancel"
-          confirmText="OK"
-          confirmButtonColor="#ADD8E6"
-          onCancelPressed={() => {
-            this.hideAlert();
-          }}
-          onConfirmPressed={() => {
-            this.hideAlert();
-            navigation.navigate('LoginScreen')
-          }}
-        />
+      
+            <ProgressDialog
+          visible={showAlert}
+          title=""
+          message="Please, wait..."
+      />
 
       )
       else
         return(
-          <AwesomeAlert
-          show={showAlert}
-          showProgress={false}
+      
+      <ConfirmDialog
           title={title}
           message={message}
-          closeOnTouchOutside={true}
-          closeOnHardwareBackPress={false}
-          showCancelButton={false}
-          showConfirmButton={true}
-          cancelText="No, cancel"
-          confirmText="OK"
-          confirmButtonColor="#ADD8E6"
-          onCancelPressed={() => {
-            this.hideAlert();
+          visible={showAlert}
+          onTouchOutside={() => setAlert(false)}
+          positiveButton={{
+              title: "OK",
+              onPress: () =>{ setAlert(false);
+              navigation.navigate('LoginScreen')
+              }
           }}
-          onConfirmPressed={() => {
-            this.hideAlert();
-            navigation.navigate('LoginScreen')
-          }}
-        />
+          
+      />
         )
   
   
