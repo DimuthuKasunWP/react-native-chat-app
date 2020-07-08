@@ -131,6 +131,7 @@ android {
 
     defaultConfig {
         applicationId "lk.ucsc.chatapp"
+        missingDimensionStrategy 'react-native-camera', 'general'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
