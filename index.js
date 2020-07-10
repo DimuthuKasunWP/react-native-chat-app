@@ -26,7 +26,7 @@ console.ignoreWarnings = [
     'Module RCTImageLoader',
     'AsyncStorage '
     ];
-    console.disableYellowBox = true;
+    // console.disableYellowBox = true;
 
 export default function Main() {
     const [animatePress, setAnimatePress] = useState(new Animated.Value(1))
