@@ -1,106 +1,252 @@
-import React, { Component } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { RNCamera } from 'react-native-camera';
-import {connect} from 'react-redux'
-import {addImage} from '../actions/cameraActions'
-import Spinner from '../components/Spinner'
 
-class Camera extends Component {
+import React, { Fragment, Component } from 'react';
+import ImagePicker from 'react-native-image-picker';
+import {
+  SafeAreaView,
+  StyleSheet,
+  ScrollView,
+  View,
+  Text,
+  StatusBar,
+  Image,
+  Button,
+  Dimensions,
+  TouchableOpacity
+} from 'react-native';
 
-  static navigationOptions ={
-    header: null
-  }
+import {
+  Header,
+  LearnMoreLinks,
+  Colors,
+  DebugInstructions,
+  ReloadInstructions,
+} from 'react-native/Libraries/NewAppScreen';
 
-  navigateHandler = () => {
-    this.props.navigation.push('ImageCollection')
-  }
-  
-  render() {
-    if(this.props.imageAdded){ this.navigateHandler() }
-    let camera = 
-    <View>
-        <RNCamera
-          ref={ref => {
-            this.camera = ref;
-          }}
-          style={styles.preview}
-          type={RNCamera.Constants.Type.back}
-          flashMode={RNCamera.Constants.FlashMode.on}
-          androidCameraPermissionOptions={{
-            title: 'Permission to use camera',
-            message: 'We need your permission to use your camera',
-            buttonPositive: 'Ok',
-            buttonNegative: 'Cancel',          
-          }}
-          androidRecordAudioPermissionOptions={{
-            title: 'Permission to use audio recording',
-            message: 'We need your permission to use your audio',
-            buttonPositive: 'Ok',
-            buttonNegative: 'Cancel',
-          }}
-      
-          />
-        <View style={{ flex: 0, flexDirection: 'row', justifyContent: 'center' }}>
-          <TouchableOpacity onPress={this.takePicture.bind(this)} style={styles.capture}>
-            <Text style={{ fontSize: 14  }}> SNAP </Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-
-    if(this.props.spinner){
-      camera = <Spinner />
+const options = {
+  title: 'Select Avatar',
+  customButtons: [{ name: 'fb', title: 'Choose Photo from Facebook' }],
+  storageOptions: {
+    skipBackup: true,
+    path: 'images',
+  },
+};
+export default class Camera extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      filepath: {
+        data: '',
+        uri: ''
+      },
+      fileData: '',
+      fileUri: ''
     }
+  }
 
+  chooseImage = () => {
+    let options = {
+      title: 'Select Image',
+      customButtons: [
+        { name: 'customOptionKey', title: 'Choose Photo from Custom Option' },
+      ],
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+      },
+    };
+    ImagePicker.showImagePicker(options, (response) => {
+      console.log('Response = ', response);
+
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+        alert(response.customButton);
+      } else {
+        const source = { uri: response.uri };
+
+        console.log('response', JSON.stringify(response));
+        this.setState({
+          filePath: response,
+          fileData: response.data,
+          fileUri: response.uri
+        });
+      }
+    });
+  }
+
+  launchCamera = () => {
+    let options = {
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+      },
+    };
+    ImagePicker.launchCamera(options, (response) => {
+      console.log('Response = ', response);
+
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+        alert(response.customButton);
+      } else {
+        const source = { uri: response.uri };
+        console.log('response', JSON.stringify(response));
+        this.setState({
+          filePath: response,
+          fileData: response.data,
+          fileUri: response.uri
+        });
+      }
+    });
+
+  }
+
+  launchImageLibrary = () => {
+    let options = {
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+      },
+    };
+    ImagePicker.launchImageLibrary(options, (response) => {
+      console.log('Response = ', response);
+
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+        alert(response.customButton);
+      } else {
+        const source = { uri: response.uri };
+        console.log('response', JSON.stringify(response));
+        this.setState({
+          filePath: response,
+          fileData: response.data,
+          fileUri: response.uri
+        });
+      }
+    });
+
+  }
+
+  renderFileData() {
+    if (this.state.fileData) {
+      return <Image source={{ uri: 'data:image/jpeg;base64,' + this.state.fileData }}
+        style={styles.images}
+      />
+    } else {
+      return <Image source={require('./assets/logo.png')}
+        style={styles.images}
+      />
+    }
+  }
+
+  renderFileUri() {
+    if (this.state.fileUri) {
+      return <Image
+        source={{ uri: this.state.fileUri }}
+        style={styles.images}
+      />
+    } else {
+      return <Image
+        source={require('./assets/galeryImages.jpg')}
+        style={styles.images}
+      />
+    }
+  }
+  render() {
     return (
-      <View style={styles.container}>
-        {camera}
-      </View>
+      <Fragment>
+        <StatusBar barStyle="dark-content" />
+        <SafeAreaView>
+          <View style={styles.body}>
+            <Text style={{textAlign:'center',fontSize:20,paddingBottom:10}} >Pick Images from Camera & Gallery</Text>
+            <View style={styles.ImageSections}>
+              <View>
+                {this.renderFileData()}
+                <Text  style={{textAlign:'center'}}>Base 64 String</Text>
+              </View>
+              <View>
+                {this.renderFileUri()}
+                <Text style={{textAlign:'center'}}>File Uri</Text>
+              </View>
+            </View>
+
+            <View style={styles.btnParentSection}>
+              <TouchableOpacity onPress={this.chooseImage} style={styles.btnSection}  >
+                <Text style={styles.btnText}>Choose File</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={this.launchCamera} style={styles.btnSection}  >
+                <Text style={styles.btnText}>Directly Launch Camera</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={this.launchImageLibrary} style={styles.btnSection}  >
+                <Text style={styles.btnText}>Directly Launch Image Library</Text>
+              </TouchableOpacity>
+            </View>
+
+          </View>
+        </SafeAreaView>
+      </Fragment>
     );
   }
-
-  takePicture = async function() {
-    if (this.camera) {
-      const options = { quality: 0.5, base64: true };
-      const data = await this.camera.takePictureAsync(options);
-      this.props.addImage(data)
-    }
-  };
-}
+};
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-    alignItems: 'center',
-    backgroundColor: 'black',
+  scrollView: {
+    backgroundColor: Colors.lighter,
   },
-  preview: {
-    flex: 1,
+
+  body: {
+    backgroundColor: Colors.white,
     justifyContent: 'center',
+    borderColor: 'black',
+    borderWidth: 1,
+    height: Dimensions.get('screen').height - 20,
+    width: Dimensions.get('screen').width
+  },
+  ImageSections: {
+    display: 'flex',
+    flexDirection: 'row',
+    paddingHorizontal: 8,
+    paddingVertical: 8,
+    justifyContent: 'center'
+  },
+  images: {
+    width: 150,
+    height: 150,
+    borderColor: 'black',
+    borderWidth: 1,
+    marginHorizontal: 3
+  },
+  btnParentSection: {
     alignItems: 'center',
+    marginTop:10
   },
-  capture: {
-    flex: 0,
-    backgroundColor: '#fff',
-    borderRadius: 5,
-    padding: 15,
-    paddingHorizontal: 20,
-    alignSelf: 'center',
-    margin: 20,
+  btnSection: {
+    width: 225,
+    height: 50,
+    backgroundColor: '#DCDCDC',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 3,
+    marginBottom:10
   },
+  btnText: {
+    textAlign: 'center',
+    color: 'gray',
+    fontSize: 14,
+    fontWeight:'bold'
+  }
 });
 
-const mapStateToProps = (state, ownProps) => {
-  return {
-    spinner: state.spinner,
-    imageAdded: state.imageIsAdded
-  }
-}
 
-const mapDispatchToProps = (dispatch, ownProps) => {
-  return {
-    addImage: (data) => {dispatch(addImage(data))}
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Camera)
