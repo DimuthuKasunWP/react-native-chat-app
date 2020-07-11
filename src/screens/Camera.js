@@ -22,15 +22,8 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 import {connect} from 'react-redux'
+import { ConfirmDialog,ProgressDialog } from 'react-native-simple-dialogs';
 
-const options = {
-  title: 'Select Avatar',
-  customButtons: [{ name: 'fb', title: 'Choose Photo from Facebook' }],
-  storageOptions: {
-    skipBackup: true,
-    path: 'images',
-  },
-};
  class Camera extends Component {
   constructor(props) {
     super(props)
@@ -40,103 +33,14 @@ const options = {
         uri: ''
       },
       fileData: '',
-      fileUri: ''
+      fileUri: '',
+      uploaded:false
     }
   }
 
-  chooseImage = () => {
-    let options = {
-      title: 'Select Image',
-      customButtons: [
-        { name: 'customOptionKey', title: 'Choose Photo from Custom Option' },
-      ],
-      storageOptions: {
-        skipBackup: true,
-        path: 'images',
-      },
-    };
-    ImagePicker.showImagePicker(options, (response) => {
-      console.log('Response = ', response);
+  
 
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      } else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton);
-        alert(response.customButton);
-      } else {
-        const source = { uri: response.uri };
-
-        console.log('response', JSON.stringify(response));
-        this.setState({
-          filePath: response,
-          fileData: response.data,
-          fileUri: response.uri
-        });
-      }
-    });
-  }
-
-  // launchCamera = () => {
-  //   let options = {
-  //     storageOptions: {
-  //       skipBackup: true,
-  //       path: 'images',
-  //     },
-  //   };
-  //   ImagePicker.launchCamera(options, (response) => {
-  //     console.log('Response = ', response);
-
-  //     if (response.didCancel) {
-  //       console.log('User cancelled image picker');
-  //     } else if (response.error) {
-  //       console.log('ImagePicker Error: ', response.error);
-  //     } else if (response.customButton) {
-  //       console.log('User tapped custom button: ', response.customButton);
-  //       alert(response.customButton);
-  //     } else {
-  //       const source = { uri: response.uri };
-  //       console.log('response', JSON.stringify(response));
-  //       this.setState({
-  //         filePath: response,
-  //         fileData: response.data,
-  //         fileUri: response.uri
-  //       });
-  //     }
-  //   });
-
-  // }
-
-  // launchImageLibrary = () => {
-  //   let options = {
-  //     storageOptions: {
-  //       skipBackup: true,
-  //       path: 'images',
-  //     },
-  //   };
-  //   ImagePicker.launchImageLibrary(options, (response) => {
-  //     console.log('Response = ', response);
-
-  //     if (response.didCancel) {
-  //       console.log('User cancelled image picker');
-  //     } else if (response.error) {
-  //       console.log('ImagePicker Error: ', response.error);
-  //     } else if (response.customButton) {
-  //       console.log('User tapped custom button: ', response.customButton);
-  //       alert(response.customButton);
-  //     } else {
-  //       const source = { uri: response.uri };
-  //       console.log('response', JSON.stringify(response));
-  //       this.setState({
-  //         filePath: response,
-  //         fileData: response.data,
-  //         fileUri: response.uri
-  //       });
-  //     }
-  //   });
-
-  // }
+  
 
   renderFileData() {
     if (this.props.data) {
@@ -163,52 +67,44 @@ const options = {
       />
     }
   }
+ 
   render() {
     return (
-      <Fragment>
-        <StatusBar barStyle="dark-content" />
-        <SafeAreaView>
+     
+        
           <View style={styles.body}>
             <Text style={{textAlign:'center',fontSize:20,paddingBottom:10}} >Choose Image to send</Text>
             <View style={styles.ImageSections}>
-              <View>
-                {this.renderFileData()}
-                <Text  style={{textAlign:'center'}}>Base 64 String</Text>
-              </View>
-              <View>
+             
+              <View style={{width:'100%',textAlign:'center'}}>
                 {this.renderFileUri()}
-                <Text style={{textAlign:'center'}}>File Uri</Text>
+               
               </View>
             </View>
                
+            <ProgressDialog
+                  visible={this.props.isLoading}
+                  title=""
+                  message="Please, wait..."
+              />
             <View style={styles.btnParentSection}>
              <AddButton />
-                        {/* <TouchableOpacity onPress={this.chooseImage} style={styles.btnSection}>
-                  <Button 
-                    style={styles.button}
-                    onPress={()=>this.chooseImage}>
-                    <Icon name="add" style={styles.add}/>
-                  </Button>
-                </TouchableOpacity> */}
-            
-              {/* <TouchableOpacity onPress={this.chooseImage} style={styles.btnSection}  >
-                <Text style={styles.btnText}>Choose File</Text>
-              </TouchableOpacity> */}
+                       
               
             </View>
 
           </View>
-        </SafeAreaView>
-      </Fragment>
+      
     );
   }
 };
 
 function mapStateToProps(state) {
-  console.log(state.imageReducer);
   return {
     uri:state.imageReducer.uri,
-    data:state.imageReducer.data
+    data:state.imageReducer.data,
+    isLoading:state.imageReducer.isLoading,
+    uploaded:state.imageReducer.uploaded
     
   }
   
@@ -224,6 +120,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderColor: 'black',
     borderWidth: 1,
+    marginTop:"-20%",
     height: Dimensions.get('screen').height - 20,
     width: Dimensions.get('screen').width
   },
@@ -232,14 +129,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingHorizontal: 8,
     paddingVertical: 8,
-    justifyContent: 'center'
+    justifyContent: 'center',
+    marginBottom:"-50%"
   },
   images: {
-    width: 150,
-    height: 150,
+    width: "80%",
+    height: "50%",
     borderColor: 'black',
     borderWidth: 1,
-    marginHorizontal: 3
+    marginHorizontal: 3,
+    marginLeft:'10%'
   },
   btnParentSection: {
     alignItems: 'center',
