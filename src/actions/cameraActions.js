@@ -39,8 +39,18 @@ export function imageIsAdded(values){
     type: types.ADD_IMAGE,
     data:values.data,
     uri:values.uri
-  };
+  }
 }
+export function successfullyUploaded(values){
+  return {
+    type: types.UPLOAD_SUCCESS,
+    isLoading:values.isLoading,
+    data:values.data,
+    uri:values.uri,
+    uploaded:values.uploaded
+  }
+}
+
 
 // export const setSpinner = () => {
 //   return {
