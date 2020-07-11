@@ -21,6 +21,15 @@ const initialState = {
             uri:action.uri
         };
     },
+    [actionTypes.UPLOAD_SUCCESS](state,action) {
+        return {
+          ...state,
+             isLoading:action.isLoading,
+             data:action.data,
+            uri:action.uri,
+            uploaded:action.uploaded
+        };
+    },
 });
 
 
