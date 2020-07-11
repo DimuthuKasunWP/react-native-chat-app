@@ -1,6 +1,7 @@
-
+import AddButton from '../components/AddButton';
 import React, { Fragment, Component } from 'react';
 import ImagePicker from 'react-native-image-picker';
+import {Button  , Icon} from 'react-native-elements'
 import {
   SafeAreaView,
   StyleSheet,
@@ -9,7 +10,6 @@ import {
   Text,
   StatusBar,
   Image,
-  Button,
   Dimensions,
   TouchableOpacity
 } from 'react-native';
@@ -21,6 +21,7 @@ import {
   DebugInstructions,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import {connect} from 'react-redux'
 
 const options = {
   title: 'Select Avatar',
@@ -30,7 +31,7 @@ const options = {
     path: 'images',
   },
 };
-export default class Camera extends Component {
+ class Camera extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -77,87 +78,87 @@ export default class Camera extends Component {
     });
   }
 
-  launchCamera = () => {
-    let options = {
-      storageOptions: {
-        skipBackup: true,
-        path: 'images',
-      },
-    };
-    ImagePicker.launchCamera(options, (response) => {
-      console.log('Response = ', response);
+  // launchCamera = () => {
+  //   let options = {
+  //     storageOptions: {
+  //       skipBackup: true,
+  //       path: 'images',
+  //     },
+  //   };
+  //   ImagePicker.launchCamera(options, (response) => {
+  //     console.log('Response = ', response);
 
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      } else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton);
-        alert(response.customButton);
-      } else {
-        const source = { uri: response.uri };
-        console.log('response', JSON.stringify(response));
-        this.setState({
-          filePath: response,
-          fileData: response.data,
-          fileUri: response.uri
-        });
-      }
-    });
+  //     if (response.didCancel) {
+  //       console.log('User cancelled image picker');
+  //     } else if (response.error) {
+  //       console.log('ImagePicker Error: ', response.error);
+  //     } else if (response.customButton) {
+  //       console.log('User tapped custom button: ', response.customButton);
+  //       alert(response.customButton);
+  //     } else {
+  //       const source = { uri: response.uri };
+  //       console.log('response', JSON.stringify(response));
+  //       this.setState({
+  //         filePath: response,
+  //         fileData: response.data,
+  //         fileUri: response.uri
+  //       });
+  //     }
+  //   });
 
-  }
+  // }
 
-  launchImageLibrary = () => {
-    let options = {
-      storageOptions: {
-        skipBackup: true,
-        path: 'images',
-      },
-    };
-    ImagePicker.launchImageLibrary(options, (response) => {
-      console.log('Response = ', response);
+  // launchImageLibrary = () => {
+  //   let options = {
+  //     storageOptions: {
+  //       skipBackup: true,
+  //       path: 'images',
+  //     },
+  //   };
+  //   ImagePicker.launchImageLibrary(options, (response) => {
+  //     console.log('Response = ', response);
 
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      } else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton);
-        alert(response.customButton);
-      } else {
-        const source = { uri: response.uri };
-        console.log('response', JSON.stringify(response));
-        this.setState({
-          filePath: response,
-          fileData: response.data,
-          fileUri: response.uri
-        });
-      }
-    });
+  //     if (response.didCancel) {
+  //       console.log('User cancelled image picker');
+  //     } else if (response.error) {
+  //       console.log('ImagePicker Error: ', response.error);
+  //     } else if (response.customButton) {
+  //       console.log('User tapped custom button: ', response.customButton);
+  //       alert(response.customButton);
+  //     } else {
+  //       const source = { uri: response.uri };
+  //       console.log('response', JSON.stringify(response));
+  //       this.setState({
+  //         filePath: response,
+  //         fileData: response.data,
+  //         fileUri: response.uri
+  //       });
+  //     }
+  //   });
 
-  }
+  // }
 
   renderFileData() {
-    if (this.state.fileData) {
-      return <Image source={{ uri: 'data:image/jpeg;base64,' + this.state.fileData }}
+    if (this.props.data) {
+      return <Image source={{ uri: 'data:image/jpeg;base64,' + this.props.data }}
         style={styles.images}
       />
     } else {
-      return <Image source={require('./assets/logo.png')}
+      return <Image source={require('../assets/logo.png')}
         style={styles.images}
       />
     }
   }
 
   renderFileUri() {
-    if (this.state.fileUri) {
+    if (this.props.uri) {
       return <Image
-        source={{ uri: this.state.fileUri }}
+        source={{ uri: this.props.uri }}
         style={styles.images}
       />
     } else {
       return <Image
-        source={require('./assets/galeryImages.jpg')}
+        source={require('../assets/logo.png')}
         style={styles.images}
       />
     }
@@ -168,7 +169,7 @@ export default class Camera extends Component {
         <StatusBar barStyle="dark-content" />
         <SafeAreaView>
           <View style={styles.body}>
-            <Text style={{textAlign:'center',fontSize:20,paddingBottom:10}} >Pick Images from Camera & Gallery</Text>
+            <Text style={{textAlign:'center',fontSize:20,paddingBottom:10}} >Choose Image to send</Text>
             <View style={styles.ImageSections}>
               <View>
                 {this.renderFileData()}
@@ -179,19 +180,21 @@ export default class Camera extends Component {
                 <Text style={{textAlign:'center'}}>File Uri</Text>
               </View>
             </View>
-
+               
             <View style={styles.btnParentSection}>
-              <TouchableOpacity onPress={this.chooseImage} style={styles.btnSection}  >
+             <AddButton />
+                        {/* <TouchableOpacity onPress={this.chooseImage} style={styles.btnSection}>
+                  <Button 
+                    style={styles.button}
+                    onPress={()=>this.chooseImage}>
+                    <Icon name="add" style={styles.add}/>
+                  </Button>
+                </TouchableOpacity> */}
+            
+              {/* <TouchableOpacity onPress={this.chooseImage} style={styles.btnSection}  >
                 <Text style={styles.btnText}>Choose File</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity onPress={this.launchCamera} style={styles.btnSection}  >
-                <Text style={styles.btnText}>Directly Launch Camera</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity onPress={this.launchImageLibrary} style={styles.btnSection}  >
-                <Text style={styles.btnText}>Directly Launch Image Library</Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
+              
             </View>
 
           </View>
@@ -200,6 +203,16 @@ export default class Camera extends Component {
     );
   }
 };
+
+function mapStateToProps(state) {
+  console.log(state.imageReducer);
+  return {
+    uri:state.imageReducer.uri,
+    data:state.imageReducer.data
+    
+  }
+  
+}
 
 const styles = StyleSheet.create({
   scrollView: {
@@ -246,7 +259,22 @@ const styles = StyleSheet.create({
     color: 'gray',
     fontSize: 14,
     fontWeight:'bold'
+  },
+   btn: {
+    position: 'absolute',
+    bottom: 30,
+    right: 30,
+  },
+  button: {
+    borderRadius: 55,
+    backgroundColor: '#046ebc',
+
+  },
+  add: {
+    fontWeight: 'bold',
+    color: 'white'
   }
 });
+export default connect(mapStateToProps,null)(Camera)
 
 
