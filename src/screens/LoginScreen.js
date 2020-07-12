@@ -49,7 +49,6 @@ const LoginScreen = ({ navigation ,dispatch,isLoading,message,title,isLoggedIn})
         if(auth().currentUser.emailVerified){
         dispatch(loginSuccess());
         hideAlert();
-         const { navigation } = this.props;
            navigation.navigate('MainScreen');
        }else{
           showAlertf();
