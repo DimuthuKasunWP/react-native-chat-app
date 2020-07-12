@@ -83,6 +83,8 @@ target 'ChatApp' do
 
   pod 'react-native-netinfo', :path => '../node_modules/@react-native-community/netinfo'
 
+  pod 'react-native-viewpager', :path => '../node_modules/@react-native-community/viewpager'
+
   target 'ChatAppTests' do
     inherit! :complete
     # Pods for testing
