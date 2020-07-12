@@ -49,7 +49,8 @@ const LoginScreen = ({ navigation ,dispatch,isLoading,message,title,isLoggedIn})
         if(auth().currentUser.emailVerified){
         dispatch(loginSuccess());
         hideAlert();
-          navigation.navigate('Dashboard')
+         const { navigation } = this.props;
+           navigation.navigate('MainScreen');
        }else{
           showAlertf();
         dispatch(loginFailed("Verify Email","Please verify your email before signin"))
