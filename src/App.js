@@ -5,35 +5,50 @@
  * @format
  * @flow strict-local
  */
+import  React, {useState} from 'react';
+import { AppRegistry,Animated } from 'react-native';
+import { Provider as PaperProvider } from 'react-native-paper';
+import { Provider } from 'react-redux';
+import { name as appName } from './app.json';
+import { theme } from 'src/config/theme';
+import configureStore from 'src/store/configureStore';
+const { persistor, store } = configureStore();
+import NavigationStack from 'src/navigation';
+import { PersistGate } from 'redux-persist/es/integration/react';
+import { YellowBox } from 'react-native';
+import OfflineNotice from 'src/components/OfflineNotice'
 
-import { createAppContainer } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
+YellowBox.ignoreWarnings([
+    'Warning: isMounted(...) is deprecated',
+    'Module RCTImageLoader',
+    'Warning: AsyncStorage '
+]);
+console.ignoreWarnings = [
+    'Warning: isMounted(...) is deprecated',
+    'Module RCTImageLoader',
+    'AsyncStorage '
+    ];
+    console.disableYellowBox = true;
 
-import {
-  HomeScreen,
-  LoginScreen,
-  RegisterScreen,
-  ForgotPasswordScreen,
-  Dashboard,
-  Camera,
-  ShowImage
-} from './screens';
+export default function Main() {
+    const [animatePress, setAnimatePress] = useState(new Animated.Value(1))
 
-console.disableYellowBox = true;
-const Router = createStackNavigator(
-  {
-    HomeScreen,
-    LoginScreen,
-    RegisterScreen,
-    ForgotPasswordScreen,
-    Dashboard,
-    Camera,
-    ShowImage
-  },
-  {
-    initialRouteName: 'Camera',
-    headerMode: 'none',
-  }
-);
+    const animateIn = () => {
+    Animated.timing(animatePress, {
+        toValue: 0.5,
+        duration: 500,
+        useNativeDriver: true 
+    }).start();
+    }
+  return (
+            <Provider store={store}>
+                <PersistGate persistor={persistor}>
+                    <PaperProvider theme={theme}>
+                        <OfflineNotice />
+                        <NavigationStack />
+                    </PaperProvider>
+                </PersistGate>
+            </Provider>
+  );
+}
 
-export default createAppContainer(Router);
