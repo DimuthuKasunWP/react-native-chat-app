@@ -212,7 +212,9 @@ import ImagePicker from 'react-native-image-picker'
                 {this.renderName(props)}
                 {/* {this.renderAudio(props)} */}
                 {/* {this.audioRender(props)} */}
-                <Bubble {...props} />
+                <Bubble
+                textProps={{ style: { color: props.position === 'left' ? '#000' : '#fff',} }}
+                 {...props} />
             </View>
         );
     };
