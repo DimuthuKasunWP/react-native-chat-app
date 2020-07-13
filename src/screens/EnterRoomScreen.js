@@ -37,7 +37,7 @@ import {setupRoom} from '../actions/chatRoomActions';
             firstName: firstName,
             lastName: lastName,
             roomName: roomName,
-            avatar: `https://upload.wikimedia.org/wikipedia/commons/9/93/Default_profile_picture_%28male%29_on_Facebook.jpg`
+            avatar: `https://firebasestorage.googleapis.com/v0/b/chat-app-71bd1.appspot.com/o/images%2Fme.jpg?alt=media&token=bc48310f-6dea-436f-b09d-9d3f5c57b126`
         }
         this.props.setupRoom(user);
         const {navigation} =this.props;
