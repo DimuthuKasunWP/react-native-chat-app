@@ -5,3 +5,4 @@ export { default as ForgotPasswordScreen } from './ForgotPasswordScreen';
 export { default as Dashboard } from './Dashboard';
 export { default as Camera } from './Camera';
 export { default as ShowImage } from './ShowImage';
+export { default as EnterRoomScreen } from './EnterRoomScreen';
