@@ -115,7 +115,7 @@ export default class InputModule extends Component {
                     <Icon
                         size={24}
                         color={AppStyles.colors.accentColor}
-                        name="thumb-up"
+                        name="send"
                     />
                 </TouchableRipple>
             </View>
