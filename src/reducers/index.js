@@ -2,7 +2,8 @@
  */
 
 import * as loginReducer from './loginReducer';
-import * as imageReducer from './imageReducer'
+import * as imageReducer from './imageReducer';
+import * as chatRoomReducer from './chatRoomReducer';
 
 
-export default Object.assign(loginReducer,imageReducer);
+export default Object.assign(loginReducer,imageReducer,chatRoomReducer);
