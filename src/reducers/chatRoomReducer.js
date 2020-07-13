@@ -7,7 +7,7 @@ const initialState = {
             firstName:'',
             lastName: '',
             roomName: '',
-            avatar: `https://firebasestorage.googleapis.com/v0/b/chat-app-71bd1.appspot.com/o/images%2F2d4b3495-ba64-434b-b801-155c9d3c6749.content%3A%2Fmedia%2Fexternal%2Fimages%2Fmedia%2F28876?alt=media&token=d50db69f-4318-47b6-ac1c-0a3413446c08`
+            avatar: `https://firebasestorage.googleapis.com/v0/b/chat-app-71bd1.appspot.com/o/images%2Fme.jpg?alt=media&token=bc48310f-6dea-436f-b09d-9d3f5c57b126`
 };
 
 export const chatRoomReducer = createReducer(initialState, {
