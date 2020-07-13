@@ -5,6 +5,7 @@ import ChatScreen from 'src/screens/ChatScreen';
 import CameraScreen from 'src/screens/CameraScreen';
 import SearchScreen from 'src/screens/SearchScreen';
 import { BottomTabNavigation } from './BottomTabNavigation';
+import EnterRoomScreen from 'src/screens/EnterRoomScreen'
 import SearchHeader from 'src/components/SearchHeader';
 import {
   HomeScreen,
@@ -90,13 +91,17 @@ const MessengerApp = createStackNavigator({
     Camera:{
         screen: Camera,
         navigationOptions: { gesturesEnabled: false, header: null }
+    },
+    EnterRoomScreen: {
+         screen: EnterRoomScreen,
+        navigationOptions: { gesturesEnabled: false, header: null }
     }
 
 
 },
 {
     headerMode: 'none',
-    initialRouteName: 'MainScreen'
+    initialRouteName: 'EnterRoomScreen'
 
 }
 
