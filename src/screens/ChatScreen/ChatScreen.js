@@ -14,12 +14,15 @@
 //         );
 //     }
 // }
-
+import { ConfirmDialog,ProgressDialog } from 'react-native-simple-dialogs';
 import React, { Component } from "react";
 import { GiftedChat, Bubble } from "react-native-gifted-chat";
+import {  Image, StatusBar } from 'react-native';
+import { Appbar, withTheme } from 'react-native-paper';
 import { ActionConst, Actions } from "react-native-router-flux";
 import {connect} from 'react-redux';
 import storage from '@react-native-firebase/storage';
+import styles from 'src/components/react-native-messenger/Toolbar/styles';
 import {
     View,
     Text,
@@ -423,6 +426,11 @@ import ImagePicker from 'react-native-image-picker'
                 />
             );
    };
+   onBackPress = () => {
+       const {navigation}=this.props;
+       navigation.navigate('MainScreen')
+
+   }
 
     render() {
         const { user } = this.props; // wherever you user info is
@@ -434,12 +442,53 @@ import ImagePicker from 'react-native-image-picker'
         };
         return (
             <View style={{ flex: 1 }}>
-                <NavigationBar
+                {/* <NavigationBar
                     title={{ title: "chat" }}
                     rightButton={rightButtonConfig}
+                /> */}
+                 <Appbar.Header statusBarHeight={0}>
+                {/* <Appbar.BackAction onPress={()=> {}} /> */}
+                <Appbar.Action icon="keyboard-backspace" onPress={() => {this.onBackPress()}} />
+                <Image
+                    source={{
+                        uri:
+                        this.props.avatar
+                    }}
+                    style={styles.avatar}
                 />
+                <Appbar.Content
+                    title={this.props.firstName +" "+this.props.lastName}
+                    titleStyle={[
+                        styles.titleStyle,
+                        {
+                           
+                        }
+                    ]}
+                   
+                />
+                <Appbar.Action icon="mic" onPress={() => {this.handleAudio()}} />
+                <Appbar.Action icon="image" onPress={() => {this.handleAddPicture()}} />
+                
+            </Appbar.Header>
                 {this.renderLoading()}
-                {this.renderAndroidMicrophone()}
+                {/* {this.state.startAudio &&
+                 <ActivityIndicator color="black" animating size="large" />
+                } */}
+                      <ConfirmDialog
+                            title="Recording"
+                            message="Press STOP to finish "
+                            visible={this.state.startAudio}
+                            onTouchOutside={() => setAlert(false)}
+                            positiveButton={{
+                                title: "STOP",
+                                onPress: () =>{ 
+                                   this.handleAudio();
+                                   
+                                }
+                            }}
+                            
+                        />
+                {/* {this.renderAndroidMicrophone()} */}
                 <GiftedChat
                     messages={this.state.messages}
                     onSend={messages => this.onSend(messages)}
