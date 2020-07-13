@@ -1,7 +1,7 @@
 import firebase from 'firebase';
 import 'firebase/storage'; 
 
-firebase.initializeApp({
+const app =firebase.initializeApp({
 
     apiKey: "AIzaSyDhXPG-FaIO2ZrNtQfqaW7pDMOJ4r3LrtY",
     authDomain: "chat-app-71bd1.firebaseapp.com",
@@ -13,4 +13,6 @@ firebase.initializeApp({
     measurementId: "G-Z8H0RG77ZS"
   
 });
+export const firebaseDB = app.database();
+
  export const  storageRef = firebase.storage().ref();
