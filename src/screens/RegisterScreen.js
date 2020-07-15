@@ -7,6 +7,7 @@ import Button from '../components/Button';
 import TextInput from '../components/TextInput';
 import BackButton from '../components/BackButton';
 import { theme } from '../config/theme';
+import { firebaseDB } from "src/firebase";
 import {
   emailValidator,
   passwordValidator,
@@ -51,20 +52,28 @@ const RegisterScreen = ({ navigation }) => {
       return;
     }
     
-    __doCreateUser(email.value, password.value);
+    __doCreateUser(email.value, password.value,name.value);
     
     
   };
 
-  const __doCreateUser = async (email, password) => {
+  const __doCreateUser = async (email, password,name) => {
      setLoading(true);
-    auth().createUserWithEmailAndPassword(email, password)
+    await auth().createUserWithEmailAndPassword(email, password)
     .then(()=>{
          auth().currentUser.sendEmailVerification().then(()=>{
-           setLoading(false);
+           
         
         this.showAlertf('Success','Please Verify Your Email!');
          navigation.navigate('LoginScreen');
+        const userName = email.toString().substring(0,email.indexOf('@'));
+         firebaseDB.ref('/users/'+userName).set({
+            "email":email,
+            "password":password,
+            "name":name}).then(function(res){
+                setLoading(false);
+
+            })
 
         })
       }).catch((error)=> {
@@ -80,7 +89,7 @@ const RegisterScreen = ({ navigation }) => {
 
   return (
     <Background>
-      <BackButton goBack={() => navigation.navigate('HomeScreen')} />
+      <BackButton goBack={() => navigation.navigate('LoginScreen')} />
 
       <Logo />
 

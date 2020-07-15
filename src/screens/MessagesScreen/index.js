@@ -20,7 +20,7 @@ export default class MessagesScreen extends Component {
                 <Button
                     icon="add-a-photo"
                     mode="contained"
-                    onPress={() => this.props.navigation.navigate('ChatScreen')}
+                    onPress={() => this.props.navigation.navigate('EnterRoomScreen')}
                 >
                     Press me
                 </Button>
