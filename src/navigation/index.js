@@ -101,7 +101,7 @@ const MessengerApp = createStackNavigator({
 },
 {
     headerMode: 'none',
-    initialRouteName: 'EnterRoomScreen'
+    initialRouteName: 'LoginScreen'
 
 }
 
