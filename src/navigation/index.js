@@ -72,10 +72,6 @@ const MessengerApp = createStackNavigator({
         screen: ChatScreen,
         navigationOptions: { gesturesEnabled: false, header: null }
     },
-     HomeScreen:{
-        screen: HomeScreen,
-        navigationOptions: { gesturesEnabled: false, header: null }
-    },
     LoginScreen:{
         screen: LoginScreen,
         navigationOptions: { gesturesEnabled: false, header: null }
