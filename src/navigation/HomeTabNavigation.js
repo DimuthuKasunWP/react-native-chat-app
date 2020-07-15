@@ -22,10 +22,6 @@ export const HomeTabNavigation = createMaterialTopTabNavigator(
         GroupsScreen: {
             screen: GroupsScreen,
             navigationOptions: { header: null, title: 'Groups' }
-        },
-        CallsScreen: {
-            screen: CallsScreen,
-            navigationOptions: { header: null, title: 'Calls' }
         }
     },
     {
