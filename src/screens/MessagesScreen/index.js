@@ -16,7 +16,7 @@ export default class MessagesScreen extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <StatusList />
+                {/* <StatusList /> */}
                 <Button
                     icon="add-a-photo"
                     mode="contained"
