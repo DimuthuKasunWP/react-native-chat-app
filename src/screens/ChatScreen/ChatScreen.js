@@ -446,8 +446,7 @@ import ImagePicker from 'react-native-image-picker'
                     title={{ title: "chat" }}
                     rightButton={rightButtonConfig}
                 /> */}
-                 <Appbar.Header statusBarHeight={0}>
-                {/* <Appbar.BackAction onPress={()=> {}} /> */}
+                 <Appbar.Header statusBarHeight={40}>
                 <Appbar.Action icon="keyboard-backspace" onPress={() => {this.onBackPress()}} />
                 <Image
                     source={{
