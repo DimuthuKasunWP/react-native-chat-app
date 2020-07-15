@@ -111,7 +111,7 @@ const LoginScreen = ({ navigation ,dispatch,isLoading,message,title,isLoggedIn})
 
   return (
     <Background>
-      <BackButton goBack={() => navigation.navigate('HomeScreen')} />
+      {/* <BackButton goBack={() => navigation.navigate('HomeScreen')} /> */}
 
       <Logo />
 
