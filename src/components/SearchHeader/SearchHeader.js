@@ -3,7 +3,7 @@ import { View, Platform, TouchableOpacity } from 'react-native';
 import { Text } from 'react-native-paper';
 import FBStatusBar from 'src/components/FBStatusBar';
 import styles from './styles';
-
+import { Avatar } from 'react-native-elements';
 import { Appbar, Searchbar } from 'react-native-paper';
 
 export default class SearchHeader extends Component {
@@ -88,7 +88,18 @@ export default class SearchHeader extends Component {
                         >
                             <Text style={styles.btnText}>Search</Text>
                         </TouchableOpacity>
-                        <Appbar.Action icon="face" onPress={this._onSearch} />
+                        <TouchableOpacity>
+                        <Avatar
+                         size="small"
+                        rounded
+                            source={{
+                                uri:
+                                'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
+                            }}
+                            showEditButton = "true"
+                            />
+                        {/* <Appbar.Action icon="face" onPress={this._onSearch} /> */}
+                        </TouchableOpacity>
                     </Appbar.Header>
                 )}
             </View>
