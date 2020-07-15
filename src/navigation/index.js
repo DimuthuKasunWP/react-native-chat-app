@@ -8,6 +8,7 @@ import { BottomTabNavigation } from './BottomTabNavigation';
 import EnterRoomScreen from 'src/screens/EnterRoomScreen'
 import SearchHeader from 'src/components/SearchHeader';
 import { HomeTabNavigation } from './HomeTabNavigation';
+import ProfileScreen from 'src/screens/ProfileScreen';
 
 import {
   HomeScreen,
@@ -93,13 +94,17 @@ const MessengerApp = createStackNavigator({
     EnterRoomScreen: {
          screen: EnterRoomScreen,
         navigationOptions: { gesturesEnabled: false, header: null }
+    },
+     ProfileScreen: {
+         screen: ProfileScreen,
+        navigationOptions: { gesturesEnabled: false, header: null }
     }
 
 
 },
 {
     headerMode: 'none',
-    initialRouteName: 'MainScreen'
+    initialRouteName: 'ProfileScreen'
 
 }
 
