@@ -5,12 +5,36 @@ import FBStatusBar from 'src/components/FBStatusBar';
 import styles from './styles';
 import { Avatar } from 'react-native-elements';
 import { Appbar, Searchbar } from 'react-native-paper';
+import auth from "@react-native-firebase/auth";
+import { firebaseDB } from "src/firebase";
 
 export default class SearchHeader extends Component {
     state = {
         searchQuery: '',
-        isFocused: false
+        isFocused: false,
+        email:'', 
+        image:null, 
+        name:'',
+        userDoc:null
     };
+
+    componentWillMount(){
+        var user= auth().currentUser;
+        this.state.email=user.email;
+        console.log("email"+user.email);
+        const userName=user.email.toString().substring(0,this.state.email.indexOf('@'));
+         this.userDocRef = firebaseDB.ref("users/"+userName);
+        this.userDocRef.on("value", snapshot => {
+               const userDoc= snapshot.val();
+                this.state.name=userDoc.name;
+                if(userDoc.name)
+                this.state.image=userDoc.image;
+               console.log("userDOc"+this.state.image);
+
+        })
+
+
+    }
 
     onFocus = () => {
         this.setState(
@@ -89,15 +113,29 @@ export default class SearchHeader extends Component {
                             <Text style={styles.btnText}>Search</Text>
                         </TouchableOpacity>
                         <TouchableOpacity>
-                        <Avatar
+                      
+                       {this.state.image ?(
+                             <Avatar
                          size="small"
-                        rounded
-                            source={{
-                                uri:
-                                'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
+                         rounded
+                           source={{
+                                uri:this.state.image
                             }}
                             showEditButton = "true"
                             />
+                       ):(
+                            <Avatar
+                         size="small"
+                         rounded
+                          source={{
+                                uri:"https://firebasestorage.googleapis.com/v0/b/chat-app-71bd1.appspot.com/o/images%2Fnotfound.jpg?alt=media&token=29f52e9f-d896-400d-827d-4cee6acd4b3e"
+                            }}
+                         
+                        showEditButton = "true"
+                            />
+                       )
+                       }
+                         
                         {/* <Appbar.Action icon="face" onPress={this._onSearch} /> */}
                         </TouchableOpacity>
                     </Appbar.Header>
