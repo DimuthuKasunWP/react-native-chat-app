@@ -5,7 +5,7 @@ import Metrics from 'src/config/metrics';
 const styles = StyleSheet.create({
     card: {
         width: Metrics.screenWidth / 2.5,
-        height: Metrics.screenHeight / 3.6,
+        height: Metrics.screenHeight / 4.5,
         margin: 5
     },
     cardView: {
