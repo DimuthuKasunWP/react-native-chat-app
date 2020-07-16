@@ -18,15 +18,15 @@ export default class GroupItem extends Component {
                     <View style={styles.nameView}>
                         <Avatar large isGroup />
                         <Text style={styles.nameText}>{item.name}</Text>
-                        <Text style={styles.last}>
+                        {/* <Text style={styles.last}>
                             Active {item.last_active}
-                        </Text>
+                        </Text> */}
                     </View>
-                    <View style={styles.footer}>
+                    {/* <View style={styles.footer}>
                         <Text numberOflines={2} style={styles.members}>
                             {item.members}
                         </Text>
-                    </View>
+                    </View> */}
                 </View>
             </Card>
         );
