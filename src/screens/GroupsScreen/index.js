@@ -10,14 +10,21 @@ import {connect} from 'react-redux';
 import { firebaseDB } from "src/firebase";
 import {setupRoom} from 'src/actions/chatRoomActions';
 
-export default class GroupsScreen extends Component {
+
+class GroupsScreen extends Component {
 
     state={
         dialogVisible:false, 
-        groupName:''
+        groupName:'',
+        name:'',
+        image:''
 
     }
     _onLoginPressed=()=>{
+     firebaseDB.ref('/groups/'+this.state.groupName).set({
+         
+
+     }).then(()=>{
         var currentUser= auth().currentUser;
         this.state.email=currentUser.email;
         const currentUserName=currentUser.email.toString().substring(0,this.state.email.indexOf('@'));
@@ -33,33 +40,33 @@ export default class GroupsScreen extends Component {
                this.state.image=userDoc.image
                console.log("userDOc"+this.state.image);
 
-               const { name,email,key, image,navigation } = this.props.item;
-             console.log("current user nameddd value"+currentUserName)
-            var array=[currentUserName.toString(),key.toString()];
-            var roomName =array.sort();
-            console.log("room name"+roomName);
-            var part1 = roomName.toString().substring(0, roomName.toString().indexOf('@'));
-            console.log("this is part 1"+part1);
-            var part2 = roomName.toString().substring(roomName.toString().indexOf('@') + 1, roomName.toString().length);
-            var firstName=name.split(" ")[0];
-            if(name.split(" ")[1])
-            var lastName=name.split(" ")[1][0]
+            
+            var firstName=this.state.name.split(" ")[0];
+            if(this.state.name.split(" ")[1])
+            var lastName=this.state.name.split(" ")[1][0]
             else
-            var lastName=" "
+            var lastName="ucsc "
              const user = {
             _id: `${firstName}${lastName}`,
             name: `${firstName}${lastName}`,
             firstName: firstName,
             lastName: lastName,
-            roomName:  `${part1}${part2}`,
-            avatar: image
+            roomName:  this.state.groupName,
+            avatar: this.state.image,
+            recieverName:this.state.groupName,
+            recieverAvatar:"group"
         }
         this.props.setupRoom(user);
-       
+        this.state.dialogVisible=false;
+        this.setState({
+            dialogVisible:false
+        })
         this.props.navigation.navigate('ChatScreen',user);
                
 
         })
+
+     })
 
     }
 
@@ -110,3 +117,9 @@ export default class GroupsScreen extends Component {
         );
     }
 }
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+    setupRoom: (values) => {dispatch(setupRoom(values))}
+  }
+}
+export default connect(null,mapDispatchToProps)(GroupsScreen)
