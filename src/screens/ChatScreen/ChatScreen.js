@@ -162,8 +162,13 @@ import ImagePicker from 'react-native-image-picker'
         const isSameUser = pUser._id === user._id;
         const isSelf = user._id === self._Id;
         const shouldNotRenderName = isSameUser;
-        let firstName = user.name.split(" ")[0];
-        let lastName = user.name.split(" ")[1][0];
+           var firstName=user.name.toString().substring(0, user.name.toString().indexOf(' '));
+         var lastName='';
+        if(user.name.toString().substring( user.name.toString().indexOf(' '),user.name.toString().length)){
+            lastName=user.name.toString().substring( user.name.toString().indexOf(' '),user.name.toString().length);
+        }else{
+           lastName="u";
+        }
         return shouldNotRenderName ? (
             <View />
         ) : (
