@@ -48,18 +48,20 @@ import {setupRoom} from 'src/actions/chatRoomActions';
             var part1 = roomName.toString().substring(0, roomName.toString().indexOf('@'));
             console.log("this is part 1"+part1);
             var part2 = roomName.toString().substring(roomName.toString().indexOf('@') + 1, roomName.toString().length);
-            var firstName=name.split(" ")[0];
+            var firstName=this.state.name.split(" ")[0];
             if(name.split(" ")[1])
-            var lastName=name.split(" ")[1][0]
+            var lastName=this.state.name.split(" ")[1][0]
             else
-            var lastName=" "
+            var lastName="ucsc "
              const user = {
             _id: `${firstName}${lastName}`,
             name: `${firstName}${lastName}`,
             firstName: firstName,
             lastName: lastName,
             roomName:  `${part1}${part2}`,
-            avatar: image
+            avatar: this.state.image,
+            recieverName:name,
+            recieverAvatar:image
         }
         this.props.setupRoom(user);
        
