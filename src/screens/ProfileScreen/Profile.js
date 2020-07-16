@@ -1,5 +1,10 @@
 import React, { Component } from 'react'
 import { Card, Icon,Button } from 'react-native-elements'
+import ImagePicker from 'react-native-image-picker'
+import auth from "@react-native-firebase/auth";
+import { firebaseDB } from "src/firebase";
+import { ProgressDialog,ConfirmDialog } from 'react-native-simple-dialogs';
+import { FormLabel, FormInput, FormValidationMessage } from 'react-native-elements'
 import {
   Image,
   ImageBackground,
@@ -42,7 +47,10 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
     paddingTop: 35,
   },
-  headerContainer: {},
+  headerContainer: {
+    marginTop: 30,
+
+  },
   headerColumn: {
     backgroundColor: 'transparent',
     ...Platform.select({
@@ -124,6 +132,53 @@ class Profile extends Component {
     ).isRequired,
   }
 
+  state ={
+
+    isUploading:false, 
+    isUploaded:false,
+    email:'', 
+    name:'',
+    image:null,
+    isSubmitted:false,
+    newName:'',
+    url:''
+  }
+  constructor(props) {
+    super(props);
+        var user= auth().currentUser;
+        this.state.email=user.email;
+        console.log("email"+user.email);
+        const userName=user.email.toString().substring(0,this.state.email.indexOf('@'));
+         this.userDocRef = firebaseDB.ref("users/"+userName);
+        this.userDocRef.on("value", snapshot => {
+               const userDoc= snapshot.val();
+                this.state.name=userDoc.name;
+                if(userDoc.image)
+                this.state.image=userDoc.image;
+               console.log("userDOc"+this.state.name);
+
+        })
+
+  }
+
+  componentWillMount(){
+           var user= auth().currentUser;
+        this.state.email=user.email;
+        console.log("email"+user.email);
+        const userName=user.email.toString().substring(0,this.state.email.indexOf('@'));
+         this.userDocRef = firebaseDB.ref("users/"+userName);
+        this.userDocRef.on("value", snapshot => {
+               const userDoc= snapshot.val();
+                this.state.name=userDoc.name;
+                if(userDoc.image)
+                this.state.image=userDoc.image;
+               console.log("userDOc"+this.state.name);
+
+        })
+
+  }
+
+
 
 
   onPressPlace = () => {
@@ -162,14 +217,24 @@ class Profile extends Component {
          
           <View style={styles.headerColumn}>
          {/* <BackButton style={{marginLeft:100}} goBack={() => navigation.navigate('MainScreen')} /> */}
-
-            <Image
+          {this.state.image ? ( 
+          <Image
               style={styles.userImage}
               source={{
-                uri: "https://s3.amazonaws.com/uifaces/faces/twitter/samuelkraft/128.jpg",
+               uri: this.state.image ,
               }}
             />
-            <Text style={styles.userNameText}>Dimuthu Kasun</Text>
+            ):(
+              <Image
+              style={styles.userImage}
+              source={{
+               uri: "https://firebasestorage.googleapis.com/v0/b/chat-app-71bd1.appspot.com/o/images%2Fnotfound.jpg?alt=media&token=29f52e9f-d896-400d-827d-4cee6acd4b3e",
+              }}
+            />
+
+            )}
+           
+            <Text style={styles.userNameText}>{this.state.name}</Text>
             <View style={styles.userAddressRow}>
               <View>
                 <Icon
@@ -182,7 +247,7 @@ class Profile extends Component {
               <View style={styles.userCityRow}>
                 <Text style={styles.userCityText}>
                   {/* {city}, {country} */}
-                  kasunwpdimuthu@gmail.com
+                  {this.state.email}
                 </Text>
               </View>
             </View>
@@ -190,6 +255,7 @@ class Profile extends Component {
         </ImageBackground>
         
       </View>
+      
     )
   }
 
@@ -231,14 +297,15 @@ class Profile extends Component {
   )
  renderUploadButton=()=>{
      let button=[];
-        if(true){
+        if(this.state.isUploading==true){
             button=   ( 
             <Button
+                    
                     title="Uploading"
                     loading
                      type="clear"
-                    />)
-        }else{
+                    />);
+        }else if(this.state.isUploaded==true){
          button=   (<Button
             icon={{
                 name: "arrow-right",
@@ -247,6 +314,12 @@ class Profile extends Component {
             }}
              type="clear"
             title="image Uploaded"
+            />);
+        }else{
+           button=   (<Button
+           onPress={this.handleAddPicture}
+             type="clear"
+            title="Upload New Image"
             />)
         }
         return button;
@@ -254,6 +327,76 @@ class Profile extends Component {
 
      
  }
+
+  handleAddPicture = () => {
+        const { user } = this.props; // wherever you user data is stored;
+    
+           let options = {
+                title: 'Select Image',
+                
+                storageOptions: {
+                    skipBackup: true,
+                    path: 'images',
+                },
+                };
+        ImagePicker.showImagePicker(options, response => {
+          this.state.isUploading=true;
+            if (response.didCancel) {
+                // do nothing
+            } else if (response.error) {
+                // alert error
+            } else {
+                const { uri } = response;
+                const extensionIndex = uri.lastIndexOf(".");
+                const extension = uri.slice(extensionIndex + 1);
+                const allowedExtensions = ["jpg", "jpeg", "png"];
+                const correspondingMime = ["image/jpeg", "image/jpeg", "image/png"];
+            
+                const file = {
+                    uri:response.uri,
+                    name: `${this.messageIdGenerator()}.${extension}`,
+                };
+                  storage()
+                 .ref("images/"+file.name)
+                 .putFile(file.uri).then(() =>{
+
+                         storage().ref('images').child(file.name).getDownloadURL().then(url => {
+                            this.state.url=url;
+                      const userName=this.state.email.toString().substring(0,this.state.email.indexOf('@'));
+                 this.userDocRef = firebaseDB.ref("users/"+userName);
+              //  this.userDocRef.on("value", snapshot => {})
+                            firebaseDB.ref('/users/'+userName).update({
+                            "email":this.state.email,
+                            "name":this.state.newName,
+                            "image":url
+                            }).then(function(res){
+                              this.state.isuploaded = true;
+                              this.state.isUploading = false;
+                            })
+               
+                    });
+                 })
+               
+           
+            }
+        });
+    };
+
+    handleSubmit(){
+      console.log("this is url"+this.state.url);
+    const userName=this.state.email.toString().substring(0,this.state.email.indexOf('@'));
+              firebaseDB.ref('/users/'+userName).update({
+                            "email":this.state.email,
+                            "name":this.state.newName,
+                            "image":this.state.url
+                            }).then(function(res){
+                                this.state.isSubmitted=true;
+                            })
+    }
+    handleDialogButtonClick(){
+        this.state.isSubmitted= false;
+
+    }
   render() {
       const {navigation} =this.props;
     return (
@@ -264,20 +407,41 @@ class Profile extends Component {
 
             {this.renderHeader()}
           </Card>
+                      
+                    <ConfirmDialog
+                  title="Submitted"
+                  message="Profile Changed Successfully"
+                  visible={this.state.isSubmitted}
+                  onTouchOutside={() => {this.state.isSubmitted=false;}}
+                  positiveButton={{
+                      title: "OK",
+                      onPress: () => this.handleDialogButtonClick
+                  }}
+                  
+              />
+              <FormLabel>Name</FormLabel>
+              <FormInput onChangeText={(text) => {
+                    this.state.newName=text
+                    console.log(text)this.state.name
+              }}/>
         
-                <TextInput
+                {/* <TextInput
                     style={{width:"80%",marginLeft:"10%",marginTop:30}}
-                    label="Enter Name"
+                    label="Enter New Name"
                     returnKeyType="next"
-                    // value={email.value}
-                    // onChangeText={text => setEmail({ value: text, error: '' })}
-                    // error={!!email.error}
-                    // errorText={email.error}
+                    value={this.state.newName}
+                    onChangeText={text => {
+                      this.state.newName=text;
+                      
+
+                      // this.state.name=this.state.newName
+                      console.log("typing"+this.state.newName);
+                    }}
                     autoCapitalize="none"
                     autoCompleteType="name"
                     textContentType="Name"
                     keyboardType="name"
-                />
+                /> */}
                 <View style={{width:"40%",marginLeft:"50%", marginBottom:"10%"}}>
                 {this.renderUploadButton()}
                 </View>
@@ -285,6 +449,10 @@ class Profile extends Component {
                 <View style={{width:"40%",marginLeft:"5%" ,marginRight:"10%"}}>
                  <Button
                  type="clear"
+                 onPress={()=>{
+                    navigation.navigate("MainScreen");
+
+                 }}
                     icon={
                         <Icon
                         name="arrow-right"
@@ -299,6 +467,10 @@ class Profile extends Component {
                 <View style={{width:"40%"}}>
                 <Button
                  type="clear"
+                 onPress={() =>{
+                    this.handleSubmit();
+
+                 }}
                     icon={
                         <Icon
                         name="arrow-right"
