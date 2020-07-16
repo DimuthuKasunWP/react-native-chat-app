@@ -9,6 +9,8 @@ export function setupRoom(values) {
            firstName:values.firstName,
            lastName:values.lastName,
            roomName:values.roomName,
-           avatar:values.avatar
+           avatar:values.avatar,
+           recieverName:values.recieverName,
+           recieverAvatar:values.recieverAvatar
     };
 }

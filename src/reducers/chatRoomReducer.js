@@ -19,7 +19,9 @@ export const chatRoomReducer = createReducer(initialState, {
            firstName:action.firstName,
            lastName:action.lastName,
            roomName:action.roomName,
-           avatar:action.avatar
+           avatar:action.avatar,
+           recieverName:action.recieverName,
+           recieverAvatar:action.recieverAvatar,
         };
     }
 });
