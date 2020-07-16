@@ -263,8 +263,8 @@ import ImagePicker from 'react-native-image-picker'
                     message.createdAt = Date.now();
                     message.user = {
                         _id: user._id,
-                        name: `${user.firstName} ${user.lastName}`,
-                        avatar: user.avatar
+                        name: user.name,
+                        avatar: user.avatar,
                     };
                       
                     message.text = "";
@@ -339,7 +339,7 @@ import ImagePicker from 'react-native-image-picker'
                         message.createdAt = Date.now();
                         message.user = {
                             _id:user._id,
-                            name: `${user.firstName} ${user.lastName}`,
+                            name: user.name,
                             avatar: user.avatar
                         };
                         
@@ -451,12 +451,12 @@ import ImagePicker from 'react-native-image-picker'
                 <Image
                     source={{
                         uri:
-                        this.props.avatar
+                        this.props.recieverAvatar
                     }}
                     style={styles.avatar}
                 />
                 <Appbar.Content
-                    title={this.props.firstName +" "+this.props.lastName}
+                    title={this.props.recieverName}
                     titleStyle={[
                         styles.titleStyle,
                         {
@@ -542,14 +542,18 @@ function mapStateToProps(state) {
                 firstName:state.chatRoomReducer.firstName,
                 lastName:state.chatRoomReducer.lastName,
                 roomName:state.chatRoomReducer.roomName,
-                avatar:state.chatRoomReducer.avatar
+                avatar:state.chatRoomReducer.avatar,
+                 recieverName:state.chatRoomReducer.recieverName,
+                recieverAvatar:state.chatRoomReducer.recieverAvatar
            },
            _id: state.chatRoomReducer._id,
            name:state.chatRoomReducer.name,
            firstName:state.chatRoomReducer.firstName,
            lastName:state.chatRoomReducer.lastName,
            roomName:state.chatRoomReducer.roomName,
-           avatar:state.chatRoomReducer.avatar
+           avatar:state.chatRoomReducer.avatar,
+           recieverName:state.chatRoomReducer.recieverName,
+           recieverAvatar:state.chatRoomReducer.recieverAvatar
   }
   
 }
