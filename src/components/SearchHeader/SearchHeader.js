@@ -112,7 +112,7 @@ export default class SearchHeader extends Component {
                         >
                             <Text style={styles.btnText}>Search</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={() => {this.props.navigation.navigate("ProfileScreen")}}>
                       
                        {this.state.image ?(
                              <Avatar

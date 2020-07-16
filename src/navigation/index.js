@@ -104,7 +104,7 @@ const MessengerApp = createStackNavigator({
 },
 {
     headerMode: 'none',
-    initialRouteName: 'ProfileScreen'
+    initialRouteName: 'MainScreen'
 
 }
 
