@@ -48,13 +48,16 @@ import {setupRoom} from 'src/actions/chatRoomActions';
             var part1 = roomName.toString().substring(0, roomName.toString().indexOf('@'));
             console.log("this is part 1"+part1);
             var part2 = roomName.toString().substring(roomName.toString().indexOf('@') + 1, roomName.toString().length);
-            var firstName=this.state.name.split(" ")[0];
-            if(name.split(" ")[1])
-            var lastName=this.state.name.split(" ")[1][0]
-            else
-            var lastName="ucsc "
+            var firstName=this.state.name.toString().substring(0, this.state.name.toString().indexOf(' '));
+            var lastName='';
+            if(this.state.name.toString().substring( this.state.name.toString().indexOf(' '),this.state.name.toString().length).length>0){
+                lastName=this.state.name.split(" ")[1][0];
+            }else{
+                lastName="u";
+            }
+            
              const user = {
-            _id: `${firstName}${lastName}`,
+            _id: currentUserName,
             name: `${firstName}${lastName}`,
             firstName: firstName,
             lastName: lastName,
