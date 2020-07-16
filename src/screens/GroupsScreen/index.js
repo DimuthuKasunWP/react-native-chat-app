@@ -20,9 +20,9 @@ class GroupsScreen extends Component {
         image:''
 
     }
-    _onLoginPressed=()=>{
+    _onCreateGroupPressed=()=>{
      firebaseDB.ref('/groups/'+this.state.groupName).set({
-         
+         name:this.state.groupName,
 
      }).then(()=>{
         var currentUser= auth().currentUser;
@@ -40,14 +40,15 @@ class GroupsScreen extends Component {
                this.state.image=userDoc.image
                console.log("userDOc"+this.state.image);
 
-            
-            var firstName=this.state.name.split(" ")[0];
-            if(this.state.name.split(" ")[1])
-            var lastName=this.state.name.split(" ")[1][0]
-            else
-            var lastName="ucsc "
+         var firstName=this.state.name.toString().substring(0, this.state.name.toString().indexOf(' '));
+            var lastName='';
+            if(this.state.name.toString().substring( this.state.name.toString().indexOf(' '),this.state.name.toString().length).length>0){
+                lastName=this.state.name.split(" ")[1][0];
+            }else{
+                lastName="u";
+            }
              const user = {
-            _id: `${firstName}${lastName}`,
+            _id: currentUserName ,
             name: `${firstName}${lastName}`,
             firstName: firstName,
             lastName: lastName,
@@ -93,7 +94,7 @@ class GroupsScreen extends Component {
                         textContentType="groupname"
                         keyboardType="groupname"
                 />
-                  <Button style={{marginBottom:"10%",marginTop:"10%"}} mode="contained" onPress={this._onLoginPressed}>
+                  <Button style={{marginBottom:"10%",marginTop:"10%"}} mode="contained" onPress={this._onCreateGroupPressed}>
                         Create Group
                     </Button>
                 </View>
@@ -112,7 +113,7 @@ class GroupsScreen extends Component {
                 >
                    Create Group
                 </Button>
-                <GroupsList />
+                <GroupsList  navigation={this.props.navigation} />
             </View>
         );
     }
