@@ -5,6 +5,7 @@ import auth from "@react-native-firebase/auth";
 import { firebaseDB } from "src/firebase";
 import { ProgressDialog,ConfirmDialog } from 'react-native-simple-dialogs';
 import { FormLabel, FormInput, FormValidationMessage } from 'react-native-elements'
+import storage from '@react-native-firebase/storage';
 import {
   Image,
   ImageBackground,
@@ -154,7 +155,7 @@ class Profile extends Component {
                const userDoc= snapshot.val();
                 this.state.name=userDoc.name;
                 if(userDoc.image)
-                this.state.image=userDoc.image;
+                this.state.url=userDoc.image;
                console.log("userDOc"+this.state.name);
 
         })
@@ -168,10 +169,16 @@ class Profile extends Component {
         const userName=user.email.toString().substring(0,this.state.email.indexOf('@'));
          this.userDocRef = firebaseDB.ref("users/"+userName);
         this.userDocRef.on("value", snapshot => {
-               const userDoc= snapshot.val();
-                this.state.name=userDoc.name;
-                if(userDoc.image)
-                this.state.image=userDoc.image;
+          const userDoc= snapshot.val();
+              this.setState({
+                name:userDoc.name,
+                url:userDoc.image,
+                email:userDoc.email
+              })
+               
+                // this.state.name=userDoc.name;
+                // if(userDoc.image)
+                // this.state.image=userDoc.image;
                console.log("userDOc"+this.state.name);
 
         })
@@ -217,11 +224,11 @@ class Profile extends Component {
          
           <View style={styles.headerColumn}>
          {/* <BackButton style={{marginLeft:100}} goBack={() => navigation.navigate('MainScreen')} /> */}
-          {this.state.image ? ( 
+          {this.state.url ? ( 
           <Image
               style={styles.userImage}
               source={{
-               uri: this.state.image ,
+               uri: this.state.url ,
               }}
             />
             ):(
@@ -328,6 +335,7 @@ class Profile extends Component {
      
  }
 
+
   handleAddPicture = () => {
         const { user } = this.props; // wherever you user data is stored;
     
@@ -340,41 +348,67 @@ class Profile extends Component {
                 },
                 };
         ImagePicker.showImagePicker(options, response => {
-          this.state.isUploading=true;
+          this.setState({
+            isUploading:true
+          })
             if (response.didCancel) {
+                this.setState({
+                  isUploading:false, 
+                  isUploaded:true
+              })
                 // do nothing
             } else if (response.error) {
+                this.setState({
+                    isUploading:false, 
+                    isUploaded:true
+                })
                 // alert error
             } else {
-                const { uri } = response;
-                const extensionIndex = uri.lastIndexOf(".");
-                const extension = uri.slice(extensionIndex + 1);
-                const allowedExtensions = ["jpg", "jpeg", "png"];
-                const correspondingMime = ["image/jpeg", "image/jpeg", "image/png"];
-            
+               var that =this;
+                var { uri } = response;
+                const filename = uri.substring(uri.lastIndexOf('/') + 1);
+                uri = Platform.OS === 'ios' ? uri.replace('file://', '') : uri;
+                // const extensionIndex = uri.lastIndexOf(".");
+                // const extension = uri.slice(extensionIndex + 1);
+                // const allowedExtensions = ["jpg", "jpeg", "png"];
+                // const correspondingMime = ["image/jpeg", "image/jpeg", "image/png"];
+                console.log("image name"+response.uri);
                 const file = {
-                    uri:response.uri,
-                    name: `${this.messageIdGenerator()}.${extension}`,
+                    uri:response.uri
                 };
                   storage()
-                 .ref("images/"+file.name)
+                 .ref("images/"+filename)
                  .putFile(file.uri).then(() =>{
-
-                         storage().ref('images').child(file.name).getDownloadURL().then(url => {
-                            this.state.url=url;
+                          console.log('uploading');
+                         storage().ref('images').child(filename).getDownloadURL().then(urll => {
+                            this.state.url=urll;
+                           
+                          
+                           this.setState({
+                             url:urll
+                           })
+                           
                       const userName=this.state.email.toString().substring(0,this.state.email.indexOf('@'));
-                 this.userDocRef = firebaseDB.ref("users/"+userName);
               //  this.userDocRef.on("value", snapshot => {})
                             firebaseDB.ref('/users/'+userName).update({
                             "email":this.state.email,
-                            "name":this.state.newName,
-                            "image":url
+                            "name":this.state.name,
+                            "image":urll
                             }).then(function(res){
-                              this.state.isuploaded = true;
-                              this.state.isUploading = false;
+                              that.setState({
+                                isUploading:false,
+                                isUploaded:true
+                              })
+                            }).catch(err =>{
+                              console.log("error in set data"+err);
                             })
                
+                    }).catch(err =>{
+                        console.log("error in downloadbal url "+err);
+
                     });
+                 }).catch(err=> {
+                   console.log("error in uploading image"+err);
                  })
                
            
@@ -383,18 +417,28 @@ class Profile extends Component {
     };
 
     handleSubmit(){
+      var that = this;
       console.log("this is url"+this.state.url);
     const userName=this.state.email.toString().substring(0,this.state.email.indexOf('@'));
               firebaseDB.ref('/users/'+userName).update({
                             "email":this.state.email,
-                            "name":this.state.newName,
+                            "name":this.state.name,
                             "image":this.state.url
                             }).then(function(res){
-                                this.state.isSubmitted=true;
+                              that.setState({
+                                isSubmitted:true
+                              })
                             })
     }
     handleDialogButtonClick(){
-        this.state.isSubmitted= false;
+      
+      this.state.isSubmitted=false;
+      this.setState({
+
+        isSubmitted:false
+      })
+      console.log("submitted"+this.state.isSubmitted)
+     
 
     }
   render() {
@@ -412,41 +456,46 @@ class Profile extends Component {
                   title="Submitted"
                   message="Profile Changed Successfully"
                   visible={this.state.isSubmitted}
-                  onTouchOutside={() => {this.state.isSubmitted=false;}}
+                  onTouchOutside={() => {this.setState({
+                    isSubmitted: false
+
+                  })
+                  
+                  }}
                   positiveButton={{
                       title: "OK",
-                      onPress: () => this.handleDialogButtonClick
+                      onPress: () => {this.handleDialogButtonClick;
+                      this.setState({
+                    isSubmitted: false
+
+                  })
+                  navigation.navigate("MainScreen")
+                      
+                      }
                   }}
                   
               />
-              <FormLabel>Name</FormLabel>
+              {/* <FormLabel>Name</FormLabel>
               <FormInput onChangeText={(text) => {
-                    this.state.newName=text
-                    console.log(text)this.state.name
-              }}/>
-        
-                {/* <TextInput
-                    style={{width:"80%",marginLeft:"10%",marginTop:30}}
-                    label="Enter New Name"
-                    returnKeyType="next"
-                    value={this.state.newName}
-                    onChangeText={text => {
-                      this.state.newName=text;
-                      
-
-                      // this.state.name=this.state.newName
-                      console.log("typing"+this.state.newName);
-                    }}
-                    autoCapitalize="none"
-                    autoCompleteType="name"
-                    textContentType="Name"
-                    keyboardType="name"
-                /> */}
+                  this.state.newName=text
+                    console.log(text);
+              }}/> */}
+                    <TextInput
+                    style={{width: '80%', marginLeft:'10%'}}
+                    label="Enter Name"
+                    returnKeyType="done"
+                    value={this.state.name}
+                    onChangeText={text => this.setState({name:text})}
+                  />
                 <View style={{width:"40%",marginLeft:"50%", marginBottom:"10%"}}>
+
+                <View style={{width:"100%",marginLeft:"-50%",marginTop:"50%",marginBottom:"-30%"}}>
                 {this.renderUploadButton()}
+                
+                </View>
                 </View>
                 <View style={{flex: 1, flexDirection: 'row'}}>
-                <View style={{width:"40%",marginLeft:"5%" ,marginRight:"10%"}}>
+                <View style={{width:"40%",marginLeft:"5%" ,marginRight:"10%",marginTop:"40%"}}>
                  <Button
                  type="clear"
                  onPress={()=>{
@@ -464,9 +513,9 @@ class Profile extends Component {
                     title="Back"
                     />
                 </View>
-                <View style={{width:"40%"}}>
+                <View style={{width:"40%",marginTop:"40%"}}>
                 <Button
-                 type="clear"
+                 type="solid"
                  onPress={() =>{
                     this.handleSubmit();
 
@@ -478,7 +527,7 @@ class Profile extends Component {
                         color="white"
                         />
                     }
-                    title="Update Profile"
+                    title="Save Changes"
                     />
                 </View>
                 </View>
@@ -488,6 +537,12 @@ class Profile extends Component {
       </ScrollView>
     )
   }
+}
+
+mapStateToProps = ()=> {
+  uploading:this.state.isUploading;
+  uploaded:this.state.isUploaded;
+
 }
 
 export default Profile
