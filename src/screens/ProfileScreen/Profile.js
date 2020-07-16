@@ -364,6 +364,7 @@ class Profile extends Component {
                 })
                 // alert error
             } else {
+               const {navigation} =this.props;
                var that =this;
                 var { uri } = response;
                 const filename = uri.substring(uri.lastIndexOf('/') + 1);
@@ -383,7 +384,7 @@ class Profile extends Component {
                          storage().ref('images').child(filename).getDownloadURL().then(urll => {
                             this.state.url=urll;
                            
-                          
+                           navigation.navigate("ProfileScreen");
                            this.setState({
                              url:urll
                            })
@@ -395,6 +396,8 @@ class Profile extends Component {
                             "name":this.state.name,
                             "image":urll
                             }).then(function(res){
+                             
+                              navigation.navigate("ProfileScreen");
                               that.setState({
                                 isUploading:false,
                                 isUploaded:true
