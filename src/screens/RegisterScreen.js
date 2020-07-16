@@ -98,7 +98,7 @@ const RegisterScreen = ({ navigation }) => {
       <Header>Create Account</Header>
 
       <TextInput
-        label="Name"
+        label="FirstName SecondName"
         returnKeyType="next"
         value={name.value}
         onChangeText={(text) => setName({ value: text, error: '' })}

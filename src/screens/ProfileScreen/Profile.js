@@ -483,13 +483,13 @@ class Profile extends Component {
                   this.state.newName=text
                     console.log(text);
               }}/> */}
-                    <TextInput
+                    {/* <TextInput
                     style={{width: '80%', marginLeft:'10%'}}
                     label="Enter Name"
                     returnKeyType="done"
                     value={this.state.name}
                     onChangeText={text => this.setState({name:text})}
-                  />
+                  /> */}
                 <View style={{width:"40%",marginLeft:"50%", marginBottom:"10%"}}>
 
                 <View style={{width:"100%",marginLeft:"-50%",marginTop:"50%",marginBottom:"-30%"}}>
