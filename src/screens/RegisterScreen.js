@@ -81,7 +81,7 @@ const RegisterScreen = ({ navigation }) => {
       }).catch((error)=> {
       if(error.code ==='auth/email-already-in-use'){
         this.showAlertf('Email Exists','Proceed to login');
-       
+        setLoading(false);
       }
           
         console.log(error.code);
