@@ -41,7 +41,6 @@ export default class SearchHeader extends Component {
     componentWillMount(){
         var user= auth().currentUser;
         this.state.email=user.email;
-        console.log("email"+user.email);
         const userName=user.email.toString().substring(0,this.state.email.indexOf('@'));
          this.userDocRef = firebaseDB.ref("users/"+userName);
         this.userDocRef.on("value", snapshot => {
