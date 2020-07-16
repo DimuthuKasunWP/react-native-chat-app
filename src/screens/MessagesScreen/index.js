@@ -17,13 +17,13 @@ export default class MessagesScreen extends Component {
         return (
             <View style={styles.container}>
                 {/* <StatusList /> */}
-                <Button
+                {/* <Button
                     icon="add-a-photo"
                     mode="contained"
                     onPress={() => this.props.navigation.navigate('EnterRoomScreen')}
                 >
                     Press me
-                </Button>
+                </Button> */}
                   <MessageList navigation={this.props.navigation} />
             </View>
         );

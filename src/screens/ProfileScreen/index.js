@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import contactData from 'src/components/profile/contact.json'
 
 import Profile from './Profile'
 
