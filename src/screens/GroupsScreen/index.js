@@ -54,7 +54,7 @@ class GroupsScreen extends Component {
             roomName:  this.state.groupName,
             avatar: this.state.image,
             recieverName:this.state.groupName,
-            recieverAvatar:"group"
+            recieverAvatar: "https://firebasestorage.googleapis.com/v0/b/chat-app-71bd1.appspot.com/o/images%2Fgroup1.png?alt=media&token=229b182b-6eea-42d8-bc3a-7739de73d049"
         }
         this.props.setupRoom(user);
         this.state.dialogVisible=false;
