@@ -9,6 +9,26 @@ import auth from "@react-native-firebase/auth";
 import { firebaseDB } from "src/firebase";
 
 export default class SearchHeader extends Component {
+
+    constructor(props) {
+        super(props);
+                var user= auth().currentUser;
+        this.state.email=user.email;
+        console.log("email"+user.email);
+        const userName=user.email.toString().substring(0,this.state.email.indexOf('@'));
+         this.userDocRef = firebaseDB.ref("users/"+userName);
+        this.userDocRef.on("value", snapshot => {
+               const userDoc= snapshot.val();
+               this.setState({
+                   name:userDoc.name,
+                   image:userDoc.image
+               })
+               console.log("userDOc"+this.state.image);
+
+        })
+        
+
+    }
     state = {
         searchQuery: '',
         isFocused: false,
@@ -26,9 +46,10 @@ export default class SearchHeader extends Component {
          this.userDocRef = firebaseDB.ref("users/"+userName);
         this.userDocRef.on("value", snapshot => {
                const userDoc= snapshot.val();
-                this.state.name=userDoc.name;
-                if(userDoc.name)
-                this.state.image=userDoc.image;
+               this.setState({
+                   name:userDoc.name,
+                   image:userDoc.image
+               })
                console.log("userDOc"+this.state.image);
 
         })
