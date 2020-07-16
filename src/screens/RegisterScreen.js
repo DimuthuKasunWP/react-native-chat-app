@@ -70,7 +70,9 @@ const RegisterScreen = ({ navigation }) => {
          firebaseDB.ref('/users/'+userName).set({
             "email":email,
             "password":password,
-            "name":name}).then(function(res){
+            "name":name,
+            "image":"https://firebasestorage.googleapis.com/v0/b/chat-app-71bd1.appspot.com/o/images%2Fnotfound.jpg?alt=media&token=29f52e9f-d896-400d-827d-4cee6acd4b3e"
+            }).then(function(res){
                 setLoading(false);
 
             })
