@@ -2,7 +2,6 @@ import { Platform } from 'react-native';
 import { createMaterialTopTabNavigator } from 'react-navigation';
 
 import MessagesScreen from 'src/screens/MessagesScreen';
-import ActiveScreen from 'src/screens/ActiveScreen';
 import GroupsScreen from 'src/screens/GroupsScreen';
 import CallsScreen from 'src/screens/CallsScreen';
 
@@ -13,11 +12,6 @@ export const HomeTabNavigation = createMaterialTopTabNavigator(
         MessagesScreen: {
             screen: MessagesScreen,
             navigationOptions: { header: null, title: 'Messages' }
-        },
-
-        ActiveScreen: {
-            screen: ActiveScreen,
-            navigationOptions: { header: null, title: 'Active' }
         },
         GroupsScreen: {
             screen: GroupsScreen,
