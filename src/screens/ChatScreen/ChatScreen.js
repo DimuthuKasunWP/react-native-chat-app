@@ -14,6 +14,7 @@
 //         );
 //     }
 // }
+import Avatar from 'src/components/Avatar';
 import { ConfirmDialog,ProgressDialog } from 'react-native-simple-dialogs';
 import React, { Component } from "react";
 import { GiftedChat, Bubble } from "react-native-gifted-chat";
@@ -448,6 +449,17 @@ import ImagePicker from 'react-native-image-picker'
                 /> */}
                  <Appbar.Header statusBarHeight={40}>
                 <Appbar.Action icon="keyboard-backspace" onPress={() => {this.onBackPress()}} />
+                {this.props.recieverAvatar==="group" ?(
+                    
+
+                    <Image
+                    source={{
+                        uri:
+                       "https://firebasestorage.googleapis.com/v0/b/chat-app-71bd1.appspot.com/o/images%2Fgroup1.png?alt=media&token=229b182b-6eea-42d8-bc3a-7739de73d049"
+                    }}
+                    style={styles.avatar}
+                />
+                ):(
                 <Image
                     source={{
                         uri:
@@ -455,6 +467,9 @@ import ImagePicker from 'react-native-image-picker'
                     }}
                     style={styles.avatar}
                 />
+
+                )}
+               
                 <Appbar.Content
                     title={this.props.recieverName}
                     titleStyle={[
