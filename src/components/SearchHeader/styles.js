@@ -42,7 +42,8 @@ const styles = StyleSheet.create({
         width: '75%',
         height: 40,
         justifyContent: 'center',
-        paddingHorizontal: 16
+        paddingHorizontal: 16,
+        marginLeft:"20%"
     },
     btnText: {
         fontSize: 16,

@@ -7,6 +7,7 @@ import { Avatar } from 'react-native-elements';
 import { Appbar, Searchbar } from 'react-native-paper';
 import auth from "@react-native-firebase/auth";
 import { firebaseDB } from "src/firebase";
+import {logo} from "src/assets/logo.png"
 
 export default class SearchHeader extends Component {
 
@@ -125,13 +126,21 @@ export default class SearchHeader extends Component {
                     </Appbar.Header>
                 ) : (
                     <Appbar.Header style={styles.toolbar}>
-                        <Appbar.Action icon="search" onPress={this.onPress} />
-                        <TouchableOpacity
-                            style={styles.btn}
-                            onPress={this.onPress}
-                        >
-                            <Text style={styles.btnText}>Search</Text>
-                        </TouchableOpacity>
+                        {/* <Appbar.Action icon="search" onPress={this.onPress} /> */}
+                        <View  style={{marginLeft:"10%"}}> 
+                              <Avatar
+                              
+                         size="small"
+                         rounded
+                           source={{
+                                uri:"https://firebasestorage.googleapis.com/v0/b/chat-app-71bd1.appspot.com/o/images%2Flogo.png?alt=media&token=0da26eab-d644-4a55-9b31-3a872f4b4804"
+                            }}
+                            showEditButton = "true"
+                            />
+                            </View>
+                        
+                            <Text style={{width:"60%",marginRight:"10%",textAlign:"center"}}>DK Chat App</Text>
+                        
                         <TouchableOpacity onPress={() => {this.props.navigation.navigate("ProfileScreen")}}>
                       
                        {this.state.image ?(
