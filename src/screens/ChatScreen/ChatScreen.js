@@ -17,7 +17,7 @@
 import Avatar from 'src/components/Avatar';
 import { ConfirmDialog,ProgressDialog } from 'react-native-simple-dialogs';
 import React, { Component } from "react";
-import { GiftedChat, Bubble } from "react-native-gifted-chat";
+import { Chat, Bubble } from "src/components/Chat";
 import {  Image, StatusBar } from 'react-native';
 import { Appbar, withTheme } from 'react-native-paper';
 import { ActionConst, Actions } from "react-native-router-flux";
@@ -498,7 +498,7 @@ import ImagePicker from 'react-native-image-picker'
                             
                         />
                 {/* {this.renderAndroidMicrophone()} */}
-                <GiftedChat
+                <Chat
                     messages={this.state.messages}
                     onSend={messages => this.onSend(messages)}
                     alwaysShowSend
