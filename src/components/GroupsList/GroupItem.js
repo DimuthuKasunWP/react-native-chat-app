@@ -39,7 +39,7 @@ import {setupRoom} from 'src/actions/chatRoomActions';
          var firstName=this.state.name.toString().substring(0, this.state.name.toString().indexOf(' '));
             var lastName='';
             if(this.state.name.toString().substring( this.state.name.toString().indexOf(' '),this.state.name.toString().length).length>0){
-                lastName=this.state.name.split(" ")[1][0];
+                lastName=this.state.name.toString().substring( this.state.name.toString().indexOf(' '),this.state.name.toString().length);
             }else{
                 lastName="u";
             }

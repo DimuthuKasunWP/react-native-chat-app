@@ -1,17 +1,37 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { View,ToastAndroid, } from 'react-native';
 import { Button } from 'react-native-paper';
 import PropTypes from 'prop-types';
 
 import StatusList from 'src/components/StatusList';
 import MessageList from 'src/components/MessageList';
 import styles from './styles';
+import {BackHandler} from 'react-native'
 
 export default class MessagesScreen extends Component {
     onPress = () => {
         const { navigation } = this.props;
         navigation.navigate('CameraScreen');
     };
+
+    componentDidMount() {
+        BackHandler.addEventListener('hardwareBackPress',()=>{
+
+            //   ToastAndroid.show('exiting', ToastAndroid.SHORT);
+            //   BackHandler.exitApp(0);
+              return true;
+        });
+    }
+
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', ()=> {
+
+        //  ToastAndroid.show('exiting', ToastAndroid.SHORT);
+        //  BackHandler.exitApp(0);
+        return true;
+        });
+    }
+
 
     render() {
         return (
