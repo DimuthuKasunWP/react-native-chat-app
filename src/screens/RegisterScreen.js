@@ -65,7 +65,6 @@ const RegisterScreen = ({ navigation }) => {
            
         
         this.showAlertf('Success','Please Verify Your Email!');
-         navigation.navigate('LoginScreen');
         const userName = email.toString().substring(0,email.indexOf('@'));
          firebaseDB.ref('/users/'+userName).set({
             "email":email,
@@ -98,7 +97,7 @@ const RegisterScreen = ({ navigation }) => {
       <Header>Create Account</Header>
 
       <TextInput
-        label="FirstName SecondName"
+        label="First_Name Second_Name"
         returnKeyType="next"
         value={name.value}
         onChangeText={(text) => setName({ value: text, error: '' })}
@@ -141,7 +140,11 @@ const RegisterScreen = ({ navigation }) => {
           onTouchOutside={() => setAlert(false)}
           positiveButton={{
               title: "OK",
-              onPress: () => setAlert(false)
+              onPress: () => { 
+                setAlert(false);
+              navigation.navigate('LoginScreen');
+                
+              }
           }}
           
       />

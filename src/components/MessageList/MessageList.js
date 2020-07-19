@@ -20,9 +20,10 @@ export default class MessageList extends Component {
         firebaseDB.ref("users").on("value", querySnapShot  => {
                 querySnapShot.forEach(function(data) {
                      if(data.key===userName) {
-
+                    console.log("current user constructor"+userName)
 
                     }else{
+                        console.log("pushing values"+data.key)
                         var i=0;
                         userDoc={
                             key:data.key,
@@ -36,7 +37,8 @@ export default class MessageList extends Component {
                             for(i=0;i<userCollection.length-1;i++){
                                 console.log("collection keys"+userCollection[i].key);
                             if(data.key===(userCollection[i].key)){
-                                userCollection.pop();
+                                console.log("removing values"+ userCollection.pop())
+                                // userCollection.pop();
                                 console.log("Duplicate key"+data.key);
                                     isDuplicate=true;
                             }
@@ -51,7 +53,7 @@ export default class MessageList extends Component {
                         image:data.val().image
 
                     }
-                    console.log("keys"+data.key);
+                    // console.log("keys"+data.key);
                     // if(!isDuplicate)
                     // userCollection.push(userDoc);
                     isDuplicate=false;
@@ -64,7 +66,7 @@ export default class MessageList extends Component {
             
                  if(userCollection.length>0){
                    this.setState({users:userCollection})
-                   console.log("fist usersssss name"+userCollection[0].name);
+                //    console.log("fist usersssss name"+userCollection[0].name);
                }
 
         })
@@ -76,131 +78,132 @@ export default class MessageList extends Component {
     }
 
     componentWillMount() {
-   var userCollection=[];
-        var userDoc={}
-      var user= auth().currentUser;
-        this.state.email=user.email;
-        console.log("email"+user.email);
-        const userName=user.email.toString().substring(0,this.state.email.indexOf('@'));
-         this.userDocRef = firebaseDB.ref("/users");
-         userCollection=[];
-         var isDuplicate =false;
-        firebaseDB.ref("users").on("value", querySnapShot  => {
-                querySnapShot.forEach(function(data) {
-                     if(data.key===userName) {
+//    var userCollection=[];
+//         var userDoc={}
+//       var user= auth().currentUser;
+//         this.state.email=user.email;
+//         console.log("email"+user.email);
+//         const userName=user.email.toString().substring(0,this.state.email.indexOf('@'));
+//          this.userDocRef = firebaseDB.ref("/users");
+//          userCollection=[];
+//          var isDuplicate =false;
+//         firebaseDB.ref("users").on("value", querySnapShot  => {
+//                 querySnapShot.forEach(function(data) {
+//                      if(data.key===userName) {
+//                             console.log("current user will mount"+userName)
 
+//                     }else{
+//                         var i=0;
+//                         userDoc={
+//                             key:data.key,
+//                             name:data.val().name,
+//                             email:data.val().email,
+//                             image:data.val().image
 
-                    }else{
-                        var i=0;
-                        userDoc={
-                            key:data.key,
-                            name:data.val().name,
-                            email:data.val().email,
-                            image:data.val().image
-
-                        }
-                        userCollection.push(userDoc);
-                        if(userCollection.length>0){
-                            for(i=0;i<userCollection.length-1;i++){
-                                console.log("collection keys"+userCollection[i].key);
-                            if(data.key===(userCollection[i].key)){
-                                userCollection.pop();
-                                console.log("Duplicate key"+data.key);
-                                    isDuplicate=true;
-                            }
-                        }
-                        }
+//                         }
+//                         userCollection.push(userDoc);
+//                         if(userCollection.length>0){
+//                             for(i=0;i<userCollection.length-1;i++){
+//                                 console.log("collection keys"+userCollection[i].key);
+//                             if(data.key===(userCollection[i].key)){
+//                                 userCollection.pop();
+//                                 console.log("Duplicate key"+data.key);
+//                                     isDuplicate=true;
+//                             }
+//                         }
+//                         }
                        
                         
-                     userDoc={
-                        key:data.key,
-                        name:data.val().name,
-                        email:data.val().email,
-                        image:data.val().image
+//                      userDoc={
+//                         key:data.key,
+//                         name:data.val().name,
+//                         email:data.val().email,
+//                         image:data.val().image
 
-                    }
-                    console.log("keys"+data.key);
-                    // if(!isDuplicate)
-                    // userCollection.push(userDoc);
-                    isDuplicate=false;
-                    // console.log("The " + userCollection[0].key + " user's name  values" + data.val().email);
+//                     }
+//                     console.log("keys"+data.key);
+//                     // if(!isDuplicate)
+//                     // userCollection.push(userDoc);
+//                     isDuplicate=false;
+//                     // console.log("The " + userCollection[0].key + " user's name  values" + data.val().email);
 
-                    }
+//                     }
                 
-                });
-                //  console.log("users collection length: " + querySnapShot.val().map((user)=>{console.log(user.name)}))
+//                 });
+//                 //  console.log("users collection length: " + querySnapShot.val().map((user)=>{console.log(user.name)}))
             
-                 if(userCollection.length>0){
-                   this.setState({users:userCollection})
-                   console.log("fist usersssss name"+userCollection[0].name);
-               }
+//                  if(userCollection.length>0){
+//                    this.setState({users:userCollection})
+//                    console.log("fist usersssss name"+userCollection[0].name);
+//                }
 
-        })
+//         })
 
     }
 
     componentDidMount() {
 
-         var userCollection=[];
-        var userDoc={}
-      var user= auth().currentUser;
-        this.state.email=user.email;
-        console.log("email"+user.email);
-        const userName=user.email.toString().substring(0,this.state.email.indexOf('@'));
-         this.userDocRef = firebaseDB.ref("/users");
-         userCollection=[];
-         var isDuplicate =false;
-        firebaseDB.ref("users").on("value", querySnapShot  => {
-                querySnapShot.forEach(function(data) {
-                     if(data.key===userName) {
+    //      var userCollection=[];
+    //     var userDoc={}
+    //   var user= auth().currentUser;
+    //     this.state.email=user.email;
+    //     console.log("email"+user.email);
+    //     const userName=user.email.toString().substring(0,this.state.email.indexOf('@'));
+    //      this.userDocRef = firebaseDB.ref("/users");
+    //      userCollection=[];
+    //      var isDuplicate =false;
+    //     firebaseDB.ref("users").on("value", querySnapShot  => {
+    //             querySnapShot.forEach(function(data) {
+    //                  if(data.key===userName) {
+    //                    console.log("current user did mount"+userName)              
 
+    //                 }else{
+    //                     console.log("Other Users"+data.key);
+    //                     var i=0;
+    //                     userDoc={
+    //                         key:data.key,
+    //                         name:data.val().name,
+    //                         email:data.val().email,
+    //                         image:data.val().image
 
-                    }else{
-                        var i=0;
-                        userDoc={
-                            key:data.key,
-                            name:data.val().name,
-                            email:data.val().email,
-                            image:data.val().image
-
-                        }
-                        userCollection.push(userDoc);
-                        if(userCollection.length>0){
-                            for(i=0;i<userCollection.length-1;i++){
-                                console.log("collection keys"+userCollection[i].key);
-                            if(data.key===(userCollection[i].key)){
-                                userCollection.pop();
-                                console.log("Duplicate key"+data.key);
-                                    isDuplicate=true;
-                            }
-                        }
-                        }
+    //                     }
+    //                     userCollection.push(userDoc);
+    //                     if(userCollection.length>0){
+    //                         for(i=0;i<userCollection.length-1;i++){
+    //                             console.log("collection keys"+userCollection[i].key);
+    //                         if(data.key===(userCollection[i].key)){
+    //                             userCollection.pop();
+    //                             console.log("Duplicate key"+data.key);
+    //                                 isDuplicate=true;
+    //                         }
+    //                     }
+    //                     }
                        
                         
-                     userDoc={
-                        key:data.key,
-                        name:data.val().name,
-                        email:data.val().email,
-                        image:data.val().image
+    //                  userDoc={
+    //                     key:data.key,
+    //                     name:data.val().name,
+    //                     email:data.val().email,
+    //                     image:data.val().image
 
-                    }
-                    console.log("keys"+data.key);
-                    // if(!isDuplicate)
-                    // userCollection.push(userDoc);
-                    isDuplicate=false;
-                    // console.log("The " + userCollection[0].key + " user's name  values" + data.val().email);
+    //                 }
+    //                 console.log("keys"+data.key);
+    //                 // if(!isDuplicate)
+    //                 // userCollection.push(userDoc);
+    //                 isDuplicate=false;
+    //                 // console.log("The " + userCollection[0].key + " user's name  values" + data.val().email);
 
-                    }
+    //                 }
                 
-                });
-                //  console.log("users collection length: " + querySnapShot.val().map((user)=>{console.log(user.name)}))
+    //             });
+    //             //  console.log("users collection length: " + querySnapShot.val().map((user)=>{console.log(user.name)}))
             
-                 if(userCollection.length>0){
-                   this.setState({users:userCollection})
-                   console.log("fist usersssss name"+userCollection[0].name);
-               }
+    //              if(userCollection.length>0){
+    //                this.setState({users:userCollection})
+    //                console.log("fist usersssss name"+userCollection[0].name);
+    //            }
 
-        })
+    //     })
     }
   
 

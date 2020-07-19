@@ -115,7 +115,7 @@ const LoginScreen = ({ navigation ,dispatch,isLoading,message,title,isLoggedIn})
 
       <Logo />
 
-      <Header>Welcome back.</Header>
+      <Header>Welcome Back!</Header>
 
       <TextInput
         label="Email"
